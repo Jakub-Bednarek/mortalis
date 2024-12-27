@@ -12,3 +12,9 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
+
+# Market assets
+Content/EuropeanHornbeam
+Content/Megascans
+Content/MSPresets
+Content/PN_FoliageCollection

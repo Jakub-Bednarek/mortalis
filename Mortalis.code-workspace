@@ -11,7 +11,30 @@
 	],
 	"settings": {
 		"typescript.tsc.autoDetect": "off",
-		"npm.autoDetect": "off"
+		"npm.autoDetect": "off",
+		"clangd.detectExtensionConflicts": false,
+		"clangd.arguments": [
+			"-header-insertion=iwyu",
+			"-header-insertion-decorators=true",
+			"-all-scopes-completion=true",
+			"-limit-results=100",
+			"-background-index=true",
+			"-limit-references=2000",
+			"-completion-style=detailed",
+			"-function-arg-placeholders=true",
+			"-log=info"
+		],
+		"clangd.path": "c:\\Users\\blackflage\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\18.1.3\\clangd_18.1.3\\bin\\clangd.exe",
+		"files.associations": {
+			"*.clangd": "yaml",
+			"*.clang-format": "yaml",
+			"*.clang-tidy": "yaml"
+		},
+		"workbench.colorCustomizations": {
+			"editorInlayHint.foreground": "#a2a2a2c0",
+			"editorInlayHint.background": "#00000000"
+		},
+		"editor.suggestFontSize": 0
 	},
 	"extensions": {
 		"recommendations": [
