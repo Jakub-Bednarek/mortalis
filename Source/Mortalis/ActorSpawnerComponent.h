@@ -19,6 +19,7 @@ public:
 	// Sets default values for this component's properties
 	UActorSpawnerComponent();
 
+	// Spawner Configuration
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration", meta = (DeterminesOutputType = "ObjClass"))
 	void AddActorToSpawnPool(TSubclassOf<class UObject> Actor);
 
@@ -26,7 +27,7 @@ public:
 	void SetActorSpawnPool(TArray<TSubclassOf<class UObject>> Actors);
 
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
-	void EnablePeriodicSpawn(float IntervalInSeconds = 10.0f);
+	void EnablePeriodicSpawn(float IntervalInSeconds, int32 Waves);
 
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
 	void DisablePeriodicSpawn();
@@ -41,20 +42,25 @@ public:
 	void SetActorSpawnCount(int32 SpawnCount);
 
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
-	void SetSpawnInterval(float IntervalInSeconds);
-
-	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
 	void SetSpawnRadius(float Radius);
 
+	// Spawner Actions
 	UFUNCTION(BlueprintCallable, Category="Spawn/Action")
 	void Spawn();
 
+	UFUNCTION(BlueprintCallable, Category="Spawn/Action")
+	int32 GetNumberOfWavesSpawned() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Spawn/Action")
+	int32 GetNumberOfWavesLeft() const;
+
+	UFUNCTION(BlueprintCallable, Category="Spawn/Action")
+	float GetTimeToNextSpawn() const;
+
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
@@ -69,6 +75,8 @@ private:
 	TArray<TSubclassOf<class UObject>> ActorsSpawnPool;
 	TArray<AActor*> SpawnedActors = {};
 
+	FVector RootLocation = {};
+
 	bool bPeriodicSpawnEnabled = false;
 	bool bNavMeshPositionSelectionEnabled = false;
 
@@ -76,5 +84,7 @@ private:
 	float TimeSinceLastSpawn = 0.0f;
 	float SpawnRadius = 0.0f;
 
+	int32 WavesToSpawn = 0;
+	int32 WavesSpawned = 0;
 	int32 ActorsSpawnCount = 0;
 };

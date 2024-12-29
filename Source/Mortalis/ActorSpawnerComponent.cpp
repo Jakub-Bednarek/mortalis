@@ -25,8 +25,7 @@ void UActorSpawnerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	RootLocation = GetOwner()->GetRootComponent()->GetComponentLocation();
 }
 
 
@@ -54,22 +53,34 @@ void UActorSpawnerComponent::SetActorSpawnPool(TArray<TSubclassOf<class UObject>
 {
 	if (Actors.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Setting actors spawn pool to empty array."));
+		UE_LOG(LogTemp, Warning, TEXT("Setting actors spawn pool to an empty array."));
 	}
 
 	ActorsSpawnPool = Actors;
 }
 
 
-void UActorSpawnerComponent::EnablePeriodicSpawn(const float IntervalInSeconds)
+void UActorSpawnerComponent::EnablePeriodicSpawn(const float IntervalInSeconds, const int32 Waves)
 {
-	SetSpawnInterval(IntervalInSeconds);
+	if (IntervalInSeconds <= 0.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawn interval must be greater than 0."));
+	}
 
+	SpawnIntervalInSeconds = IntervalInSeconds;
+
+	if (Waves <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawn interval should be greater than 0."));
+	}
+
+	WavesToSpawn = Waves;
 	bPeriodicSpawnEnabled = true;
 }
 
 void UActorSpawnerComponent::DisablePeriodicSpawn()
 {
+	// TODO: check if tick should be disabled for performance improvement
 	bPeriodicSpawnEnabled = false;
 }
 
@@ -93,17 +104,6 @@ void UActorSpawnerComponent::SetActorSpawnCount(const int32 SpawnCount)
 	ActorsSpawnCount = SpawnCount;
 }
 
-void UActorSpawnerComponent::SetSpawnInterval(const float IntervalInSeconds)
-{
-	if (IntervalInSeconds <= 0.0f)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawn interval must be greater than 0."));
-		return;
-	}
-
-	SpawnIntervalInSeconds = IntervalInSeconds;
-}
-
 void UActorSpawnerComponent::SetSpawnRadius(const float Radius)
 {
 	if (Radius < 0.0f)
@@ -125,6 +125,13 @@ void UActorSpawnerComponent::Spawn()
 	{
 		SpawnWithStaticPosition();
 	}
+
+	++WavesSpawned;
+
+	if (WavesSpawned >= WavesToSpawn)
+	{
+		DisablePeriodicSpawn();
+	}
 }
 
 void UActorSpawnerComponent::SpawnWithNavMeshSelectionEnabled()
@@ -134,13 +141,12 @@ void UActorSpawnerComponent::SpawnWithNavMeshSelectionEnabled()
 	FNavLocation SelectedSpawnLocation;
 	for (int32 i = 0; i < ActorsSpawnCount; i++)
 	{
-		auto Result = NavSystem->GetRandomPointInNavigableRadius(FVector(0.0), SpawnRadius, SelectedSpawnLocation);
+		auto Result = NavSystem->GetRandomPointInNavigableRadius(RootLocation, SpawnRadius, SelectedSpawnLocation);
 		if (not Result)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Failed to select random point in nav mesh, can't spawn entity."));
 			continue;
 		}
-
 
 		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), SelectedSpawnLocation.Location, FRotator(0.0f)));
 	}
@@ -148,10 +154,9 @@ void UActorSpawnerComponent::SpawnWithNavMeshSelectionEnabled()
 
 void UActorSpawnerComponent::SpawnWithStaticPosition()
 {
-	// RootComponent->GetWorldLocation();
 	for (int32 i = 0; i < ActorsSpawnCount; i++)
 	{
-		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), FVector(0.0f), FRotator(0.0f)));
+		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), RootLocation, FRotator(0.0f)));
 	}
 }
 
@@ -163,7 +168,6 @@ bool UActorSpawnerComponent::ShouldSpawnActors(const float DeltaTime)
 	}
 
 	TimeSinceLastSpawn += DeltaTime;
-
 	if (TimeSinceLastSpawn >= SpawnIntervalInSeconds)
 	{
 		TimeSinceLastSpawn -= SpawnIntervalInSeconds;
@@ -174,7 +178,22 @@ bool UActorSpawnerComponent::ShouldSpawnActors(const float DeltaTime)
 	return false;
 }
 
-int UActorSpawnerComponent::SelectRandomActor() const
+int32 UActorSpawnerComponent::SelectRandomActor() const
 {
-	return 0;
+	return FMath::RandRange(0, ActorsSpawnPool.Num() - 1);
+}
+
+int32 UActorSpawnerComponent::GetNumberOfWavesSpawned() const
+{
+	return WavesSpawned;
+}
+
+int32 UActorSpawnerComponent::GetNumberOfWavesLeft() const
+{
+	return WavesToSpawn - WavesSpawned;
+}
+
+float UActorSpawnerComponent::GetTimeToNextSpawn() const
+{
+	return SpawnIntervalInSeconds - TimeSinceLastSpawn;
 }
