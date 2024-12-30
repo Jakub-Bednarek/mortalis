@@ -56,7 +56,7 @@ void UActorSpawnerComponent::SetActorSpawnPool(TArray<TSubclassOf<class UObject>
 		UE_LOG(LogTemp, Warning, TEXT("Setting actors spawn pool to an empty array."));
 	}
 
-	ActorsSpawnPool = Actors;
+	ActorsSpawnPool = MoveTemp(Actors);
 }
 
 

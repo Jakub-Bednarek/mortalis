@@ -9,6 +9,8 @@
 
 #include "ActorSpawnerComponent.generated.h"
 
+// TODO infinite spawn
+// TODO pause spawn (without disabling)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MORTALIS_API UActorSpawnerComponent : public UActorComponent
