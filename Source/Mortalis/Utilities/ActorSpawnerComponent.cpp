@@ -148,6 +148,8 @@ void UActorSpawnerComponent::SpawnWithNavMeshSelectionEnabled()
 			continue;
 		}
 
+		// TODO: change hardcode for half of target height
+		SelectedSpawnLocation.Location.Z += 32.0f;
 		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), SelectedSpawnLocation.Location, FRotator(0.0f)));
 	}
 }
