@@ -54,20 +54,32 @@ public:
 private:
 	void ProcessFrameMovement(float DeltaTime);
 
+	void StartNormalAttackTimer();
+	void UpdateNormalAttackTimer(float DeltaTime);
+
+	// Update each second instead of tick? - may be bad for mana regen
+	void ApplyHealthRegeneration(float DeltaTime);
+	void ApplyManaRegeneration(float DeltaTime);
+
 	FVector CalculateAttackDirection() const;
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
 
 	double MovementSpeed = 400.0;
-	double AttacksPerSecond = 1.0;
+	double AttacksPerSecond = 2.0;
 
 	double MaxHealth = 100.0;
 	double CurrentHealth = MaxHealth;
 	double HealthRegenerationPerSecond = 0.2;
 
 	double MaxMana = 50.0;
-	double Mana = MaxMana;
+	double CurrentMana = MaxMana;
 	double ManaRegenerationPerSecond = 10.0;
+	double SpecialAttackManaCost = 50.0;
 
 	FVector ViewportCenter;
+
+	// Normal attack
+	float NormalAttackTimer = 0.0f;
+	bool bCanExecuteNormalAttack = true;
 };

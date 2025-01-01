@@ -33,43 +33,62 @@ void AArcherCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	ProcessFrameMovement(DeltaTime);
+
+	if(not bCanExecuteNormalAttack)
+	{
+		UpdateNormalAttackTimer(DeltaTime);
+	}
+
+	ApplyHealthRegeneration(DeltaTime);
+	ApplyManaRegeneration(DeltaTime);
 }
 
 void AArcherCharacter::MoveForward()
 {
-	FrameMovementVector.Y += 1.0;
+	// FrameMovementVector.Y += 1.0;
 	FrameMovementVector.X += 1.0;
 }
 
 void AArcherCharacter::MoveBackward()
 {
-	FrameMovementVector.Y -= 1.0;
 	FrameMovementVector.X -= 1.0;
 }
 
 void AArcherCharacter::MoveLeft()
 {
 	FrameMovementVector.Y -= 1.0;
-	FrameMovementVector.X += 1.0;
 }
 
 void AArcherCharacter::MoveRight()
 {
 	FrameMovementVector.Y += 1.0;
-	FrameMovementVector.X -= 1.0;
 }
 
 void AArcherCharacter::NormalAttack()
 {
+	if (not bCanExecuteNormalAttack)
+	{
+		return;
+	}
+
 	const auto Direction = CalculateAttackDirection();
 	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(NormalProjectile, TargetLocation, FRotator(0.0f));
 
 	SpawnedProjectile->Fire(Direction);
+
+	StartNormalAttackTimer();
 }
 
 void AArcherCharacter::SpecialAttack()
 {
+	if (not (CurrentMana >= SpecialAttackManaCost))
+	{
+		return;
+	}
+
+	CurrentMana -= SpecialAttackManaCost;
+
 	const auto Direction = CalculateAttackDirection();
 	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(SpecialProjectile, TargetLocation, FRotator(0.0f));
@@ -95,14 +114,52 @@ void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 	FrameMovementVector = FVector(0.0);
 }
 
+void AArcherCharacter::StartNormalAttackTimer()
+{
+	bCanExecuteNormalAttack = false;
+	NormalAttackTimer = 0.0f;
+}
+
+void AArcherCharacter::UpdateNormalAttackTimer(float DeltaTime)
+{
+	NormalAttackTimer += DeltaTime;
+
+	if (NormalAttackTimer >= (1.0 / AttacksPerSecond))
+	{
+		bCanExecuteNormalAttack = true;
+	}
+}
+
+void AArcherCharacter::ApplyHealthRegeneration(float DeltaTime)
+{
+	if (CurrentHealth >= MaxHealth)
+	{
+		return;
+	}
+
+	CurrentHealth += HealthRegenerationPerSecond * DeltaTime;
+}
+
+void AArcherCharacter::ApplyManaRegeneration(float DeltaTime)
+{
+	if (CurrentMana >= MaxMana)
+	{
+		return;
+	}
+
+	CurrentMana += ManaRegenerationPerSecond * DeltaTime;
+}
+
+// TODO: when mouse is in the corner projectiles have slight offset but when on Axis they're perfectly fine
 FVector AArcherCharacter::CalculateAttackDirection() const
 {
 	float MouseX;
 	float MouseY;
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(MouseX, MouseY);
 
-	auto Direction = (ViewportCenter - FVector(MouseX, MouseY, 0.0f)).RotateAngleAxis(-45.0, FVector(0.0f, 0.0f, 1.0f));
+	auto Direction = (ViewportCenter - FVector(MouseX, MouseY, 0.0f));
 	Direction.Normalize();
+	Direction = FVector(Direction.Y, -Direction.X, 0.0f); // Swap X and Y coordinates to align with world axis
 
 	if (Direction.X == 0.0f and Direction.Y == 0.0f)
 	{
