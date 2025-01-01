@@ -20,6 +20,12 @@ public:
 	void SetDurationInSeconds(float Value);
 	void Fire(const FVector& Direction);
 
+	UFUNCTION(BlueprintCallable)
+	void OnProjectileHit();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetHasCollided() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,7 +33,6 @@ protected:
 private:
 	void UpdatePosition(float DeltaTime);
 
-	void OnProjectileHit();
 	void OnProjectileExpire();
 
 	void CalculateCurrentDuration(float DeltaTime);
@@ -42,6 +47,7 @@ public:
 	float CurrentDuration = 0.0f;
 
 	bool bFired = false;
+	bool bHasCollided = false;
 
 	FVector Direction = {};
 };

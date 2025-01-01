@@ -69,7 +69,14 @@ void ABasicProjectile::Fire(const FVector& TargetDirection)
 
 void ABasicProjectile::OnProjectileHit()
 {
+	bHasCollided = true;
 
+	Destroy();
+}
+
+bool ABasicProjectile::GetHasCollided() const
+{
+	return bHasCollided;
 }
 
 void ABasicProjectile::OnProjectileExpire()
