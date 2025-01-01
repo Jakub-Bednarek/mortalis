@@ -9,5 +9,7 @@ public class Mortalis : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput" });
-    }
+    
+		PublicIncludePaths.AddRange(new string[] { "Mortalis" });
+	}
 }

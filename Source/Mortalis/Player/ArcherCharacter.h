@@ -33,6 +33,13 @@ public:
 	UFUNCTION(BlueprintCallable, category="Player/Attack")
 	void SpecialAttack();
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
+	TSubclassOf<AActor> NormalProjectile {};
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
+	TSubclassOf<AActor> SpecialProjectile {};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,8 +54,18 @@ public:
 private:
 	void ProcessFrameMovement(float DeltaTime);
 
+	void LoadProjectileActors();
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
 
 	double MovementSpeed = 400.0;
+	double AttacksPerSecond = 1.0;
+
+	double MaxHealth = 100.0;
+	double CurrentHealth = MaxHealth;
+	double HealthRegenerationPerSecond = 0.2;
+
+	double MaxMana = 50.0;
+	double Mana = MaxMana;
+	double ManaRegenerationPerSecond = 10.0;
 };

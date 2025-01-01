@@ -2,6 +2,9 @@
 
 
 #include "ArcherCharacter.h"
+#include "Projectiles/BasicProjectile.h"
+
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 // Sets default values
 AArcherCharacter::AArcherCharacter()
@@ -52,12 +55,18 @@ void AArcherCharacter::MoveRight()
 
 void AArcherCharacter::NormalAttack()
 {
-	UE_LOG(LogTemp, Log, TEXT("NormalAttack()"));
+	auto TargetLocation = GetActorLocation() + FVector(350.0f, 0.0f, 0.0f);
+	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(NormalProjectile, TargetLocation, FRotator(0.0f));
+
+	SpawnedProjectile->Fire(FVector(1.0f, 0.0f, 0.0f));
 }
 
 void AArcherCharacter::SpecialAttack()
 {
-	UE_LOG(LogTemp, Log, TEXT("SpecialAttack()"));
+	auto TargetLocation = GetActorLocation() + FVector(350.0f, 0.0f, 0.0f);
+	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(SpecialProjectile, TargetLocation, FRotator(0.0f));
+
+	SpawnedProjectile->Fire(FVector(1.0f, 0.0f, 0.0f));
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
