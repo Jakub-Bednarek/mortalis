@@ -54,7 +54,7 @@ public:
 private:
 	void ProcessFrameMovement(float DeltaTime);
 
-	void LoadProjectileActors();
+	FVector CalculateAttackDirection() const;
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
 
@@ -68,4 +68,6 @@ private:
 	double MaxMana = 50.0;
 	double Mana = MaxMana;
 	double ManaRegenerationPerSecond = 10.0;
+
+	FVector ViewportCenter;
 };

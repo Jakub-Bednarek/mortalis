@@ -65,8 +65,6 @@ void ABasicProjectile::Fire(const FVector& TargetDirection)
 	Direction.Normalize();
 
 	bFired = true;
-
-	UE_LOG(LogTemp, Warning, TEXT("FIRE BITCH"));
 }
 
 void ABasicProjectile::OnProjectileHit()

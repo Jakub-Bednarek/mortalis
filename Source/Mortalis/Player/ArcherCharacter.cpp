@@ -4,6 +4,9 @@
 #include "ArcherCharacter.h"
 #include "Projectiles/BasicProjectile.h"
 
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
+
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 // Sets default values
@@ -19,6 +22,9 @@ void AArcherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// TODO: this should definitely not be here
+	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
 }
 
 // Called every frame
@@ -55,18 +61,20 @@ void AArcherCharacter::MoveRight()
 
 void AArcherCharacter::NormalAttack()
 {
-	auto TargetLocation = GetActorLocation() + FVector(350.0f, 0.0f, 0.0f);
+	const auto Direction = CalculateAttackDirection();
+	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(NormalProjectile, TargetLocation, FRotator(0.0f));
 
-	SpawnedProjectile->Fire(FVector(1.0f, 0.0f, 0.0f));
+	SpawnedProjectile->Fire(Direction);
 }
 
 void AArcherCharacter::SpecialAttack()
 {
-	auto TargetLocation = GetActorLocation() + FVector(350.0f, 0.0f, 0.0f);
+	const auto Direction = CalculateAttackDirection();
+	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(SpecialProjectile, TargetLocation, FRotator(0.0f));
 
-	SpawnedProjectile->Fire(FVector(1.0f, 0.0f, 0.0f));
+	SpawnedProjectile->Fire(CalculateAttackDirection());
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
@@ -85,6 +93,23 @@ void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 	SetActorLocation(CharacterFrameStartLocation + FrameMovementVector);
 
 	FrameMovementVector = FVector(0.0);
+}
+
+FVector AArcherCharacter::CalculateAttackDirection() const
+{
+	float MouseX;
+	float MouseY;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(MouseX, MouseY);
+
+	auto Direction = (ViewportCenter - FVector(MouseX, MouseY, 0.0f)).RotateAngleAxis(-45.0, FVector(0.0f, 0.0f, 1.0f));
+	Direction.Normalize();
+
+	if (Direction.X == 0.0f and Direction.Y == 0.0f)
+	{
+		return FVector(0.5f, 0.5f, 0.0f);
+	}
+
+	return Direction;
 }
 
 // Called to bind functionality to input
