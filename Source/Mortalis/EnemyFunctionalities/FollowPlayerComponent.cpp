@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Utilities/FollowPlayerComponent.h"
+#include "EnemyFunctionalities/FollowPlayerComponent.h"
 
 #include "FollowPlayerComponent.h"
 #include "Kismet/KismetMathLibrary.h"
