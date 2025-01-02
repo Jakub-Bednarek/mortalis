@@ -93,7 +93,10 @@ void AArcherCharacter::SpecialAttack()
 	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(SpecialProjectile, TargetLocation, FRotator(0.0f));
 
-	SpawnedProjectile->Fire(CalculateAttackDirection());
+	if (IsValid(SpawnedProjectile))
+	{
+		SpawnedProjectile->Fire(CalculateAttackDirection());
+	}
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)

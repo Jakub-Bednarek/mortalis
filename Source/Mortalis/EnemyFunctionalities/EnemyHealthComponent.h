@@ -2,8 +2,12 @@
 
 #pragma once
 
+#include "UI/EnemyResourceBarWidget.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/WidgetComponent.h"
+
 #include "EnemyHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDamageTaken);
@@ -28,6 +32,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHealth = 100.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UEnemyResourceBarWidget> HealthBarWidgetClass;
+
+	// Delegates
 	UPROPERTY(BLueprintCallable, BlueprintAssignable)
 	FOnDamageTaken OnDamageTaken;
 
@@ -41,6 +49,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	UWidgetComponent* RootWidget;
+	UEnemyResourceBarWidget* HealthBarWidget;
+
 	float CurrentHealth;
 
 	bool bIsAlive = true;
