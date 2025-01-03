@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+
+#include "UI/PlayerStatisticsHUD.h"
+
 #include "ArcherCharacter.generated.h"
 
 UCLASS()
@@ -39,6 +42,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
 	TSubclassOf<AActor> SpecialProjectile {};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
 
 protected:
 	// Called when the game starts or when spawned
@@ -76,6 +82,11 @@ private:
 	double CurrentMana = MaxMana;
 	double ManaRegenerationPerSecond = 10.0;
 	double SpecialAttackManaCost = 50.0;
+
+	float ExperienceForNextLevel = 100.0f;
+	float CurrentExperience = 0.0f;
+	
+	UPlayerStatisticsHUD* PlayerStatisticsHUD;
 
 	FVector ViewportCenter;
 

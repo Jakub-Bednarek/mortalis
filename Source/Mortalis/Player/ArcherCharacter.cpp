@@ -22,9 +22,12 @@ void AArcherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// TODO: this should definitely not be here
+	// TODO: this should definitely not be here + doesn't get updated on viewport resize!
 	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
+
+	PlayerStatisticsHUD = (UPlayerStatisticsHUD*)(CreateWidget(UGameplayStatics::GetPlayerController(GetWorld(), 0), PlayerStatisticsHUDClass));
+	PlayerStatisticsHUD->AddToPlayerScreen();
 }
 
 // Called every frame
@@ -75,9 +78,11 @@ void AArcherCharacter::NormalAttack()
 	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(NormalProjectile, TargetLocation, FRotator(0.0f));
 
-	SpawnedProjectile->Fire(Direction);
-
-	StartNormalAttackTimer();
+	if (IsValid(SpawnedProjectile))
+	{
+		SpawnedProjectile->Fire(Direction);
+		StartNormalAttackTimer();
+	}
 }
 
 void AArcherCharacter::SpecialAttack()
@@ -97,6 +102,8 @@ void AArcherCharacter::SpecialAttack()
 	{
 		SpawnedProjectile->Fire(CalculateAttackDirection());
 	}
+
+	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
@@ -135,22 +142,27 @@ void AArcherCharacter::UpdateNormalAttackTimer(float DeltaTime)
 
 void AArcherCharacter::ApplyHealthRegeneration(float DeltaTime)
 {
+	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
 	if (CurrentHealth >= MaxHealth)
 	{
 		return;
 	}
 
 	CurrentHealth += HealthRegenerationPerSecond * DeltaTime;
+
+	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
 }
 
 void AArcherCharacter::ApplyManaRegeneration(float DeltaTime)
 {
+	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 	if (CurrentMana >= MaxMana)
 	{
 		return;
 	}
 
 	CurrentMana += ManaRegenerationPerSecond * DeltaTime;
+	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
 // TODO: when mouse is in the corner projectiles have slight offset but when on Axis they're perfectly fine
