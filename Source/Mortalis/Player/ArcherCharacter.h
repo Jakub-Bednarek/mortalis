@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 
-#include "UI/PlayerStatisticsHUD.h"
+#include "UI/Game/PlayerStatisticsHUD.h"
 
 #include "ArcherCharacter.generated.h"
 

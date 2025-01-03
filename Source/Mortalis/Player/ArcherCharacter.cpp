@@ -128,7 +128,6 @@ void AArcherCharacter::LevelUpCharacter()
 	ExperienceForNextLevel *= 1.1f;
 	CurrentLevel += 1;
 
-
 	UpdateExperienceHUD();
 }
 

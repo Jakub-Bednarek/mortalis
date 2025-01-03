@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
-#include "UI/PlayerStatisticsHUD.h"
+#include "UI/Game/PlayerStatisticsHUD.h"
 
 #include "PlayerStatisticsComponent.generated.h"
 

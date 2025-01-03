@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "UI/EnemyResourceBarWidget.h"
+#include "UI/Game/EnemyResourceBarWidget.h"
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
