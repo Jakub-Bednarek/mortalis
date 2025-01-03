@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, category="Player/Attack")
 	void SpecialAttack();
 
+	UFUNCTION(BlueprintCallable, category="Player/Statistics")
+	void AddExperience(float Value);
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
 	TSubclassOf<AActor> NormalProjectile {};

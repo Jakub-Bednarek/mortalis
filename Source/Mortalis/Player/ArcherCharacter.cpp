@@ -106,6 +106,12 @@ void AArcherCharacter::SpecialAttack()
 	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
+void AArcherCharacter::AddExperience(float Value)
+{
+	CurrentExperience += Value;
+	PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+}
+
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 {
 	if (FrameMovementVector == FVector(0.0))
