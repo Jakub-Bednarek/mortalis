@@ -9,6 +9,8 @@
 
 #include "ArcherCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLevelUp, int32, Level);
+
 UCLASS()
 class MORTALIS_API AArcherCharacter : public APawn
 {
@@ -49,6 +51,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
 
+	// Delegates
+	UPROPERTY(BLueprintCallable, BlueprintAssignable)
+	FOnCharacterLevelUp OnCharacterLevelUp;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -70,6 +76,9 @@ private:
 	void ApplyHealthRegeneration(float DeltaTime);
 	void ApplyManaRegeneration(float DeltaTime);
 
+	void UpdateExperienceHUD();
+	void LevelUpCharacter();
+
 	FVector CalculateAttackDirection() const;
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
@@ -86,6 +95,7 @@ private:
 	double ManaRegenerationPerSecond = 10.0;
 	double SpecialAttackManaCost = 50.0;
 
+	int32 CurrentLevel = 1;
 	float ExperienceForNextLevel = 100.0f;
 	float CurrentExperience = 0.0f;
 	

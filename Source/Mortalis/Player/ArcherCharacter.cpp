@@ -110,6 +110,31 @@ void AArcherCharacter::AddExperience(float Value)
 {
 	CurrentExperience += Value;
 	PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+
+	if (CurrentExperience >= ExperienceForNextLevel)
+	{
+		LevelUpCharacter();
+
+		if (OnCharacterLevelUp.IsBound())
+		{
+			OnCharacterLevelUp.Broadcast(CurrentLevel);
+		}
+	}
+}
+
+void AArcherCharacter::LevelUpCharacter()
+{
+	CurrentExperience -= ExperienceForNextLevel;
+	ExperienceForNextLevel *= 1.1f;
+	CurrentLevel += 1;
+
+
+	UpdateExperienceHUD();
+}
+
+void AArcherCharacter::UpdateExperienceHUD()
+{
+	PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
