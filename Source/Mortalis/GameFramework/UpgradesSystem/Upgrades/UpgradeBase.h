@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-#include "GameFramework/Statistics/PlayerStatisticsComponent.h"
+#include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
 
 #include "UpgradeBase.generated.h"
 

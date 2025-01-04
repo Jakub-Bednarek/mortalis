@@ -16,7 +16,6 @@ class MORTALIS_API UPlayerStatisticsComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UPlayerStatisticsComponent();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -33,6 +32,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeMaxMana(float Delta);
 
+	UFUNCTION(BlueprintCallable)
+	float GetAttacksPerSecond() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetBaseNormalAttackDamage() const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -45,6 +50,8 @@ private:
 
 	double MovementSpeed = 400.0;
 	double AttacksPerSecond = 2.0;
+
+	float BaseNormalAttackDamage = 115.0f;
 
 	double MaxHealth = 100.0;
 	double CurrentHealth = MaxHealth;

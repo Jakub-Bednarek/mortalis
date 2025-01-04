@@ -59,6 +59,18 @@ void ABasicProjectile::SetDurationInSeconds(float Value)
 	DurationInSeconds = Value;
 }
 
+// Straight up value or pass PlayerStatistics to allow more complex calulations and interactions?
+void ABasicProjectile::SetBaseDamage(float Value)
+{
+	if (Value <= 0.0f)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SetBaseDamage: Value must be greater than 0"));
+		return;
+	}
+
+	BaseDamage = Value;
+}
+
 void ABasicProjectile::Fire(const FVector& TargetDirection)
 {
 	Direction = TargetDirection;
@@ -77,6 +89,11 @@ void ABasicProjectile::OnProjectileHit()
 bool ABasicProjectile::GetHasCollided() const
 {
 	return bHasCollided;
+}
+
+float ABasicProjectile::GetDamage() const
+{
+	return BaseDamage;
 }
 
 void ABasicProjectile::OnProjectileExpire()

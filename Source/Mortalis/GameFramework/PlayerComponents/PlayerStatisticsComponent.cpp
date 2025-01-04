@@ -5,18 +5,11 @@
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
-// Sets default values for this component's properties
 UPlayerStatisticsComponent::UPlayerStatisticsComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-
-// Called when the game starts
 void UPlayerStatisticsComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -30,15 +23,10 @@ void UPlayerStatisticsComponent::BeginPlay()
 	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
-
-// Called every frame
 void UPlayerStatisticsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
-
 
 void UPlayerStatisticsComponent::ChangeCurrentHealth(const float Delta)
 {
@@ -62,4 +50,14 @@ void UPlayerStatisticsComponent::ChangeMaxMana(const float Delta)
 {
 	MaxMana += Delta;
 	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
+}
+
+float UPlayerStatisticsComponent::GetAttacksPerSecond() const
+{
+	return AttacksPerSecond;
+}
+
+float UPlayerStatisticsComponent::GetBaseNormalAttackDamage() const
+{
+	return BaseNormalAttackDamage;
 }

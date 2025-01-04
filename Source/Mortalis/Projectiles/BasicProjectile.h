@@ -19,9 +19,13 @@ public:
 	void SetVelocity(float Value);
 	void SetDurationInSeconds(float Value);
 	void Fire(const FVector& Direction);
+	void SetBaseDamage(float Value);
 
 	UFUNCTION(BlueprintCallable)
 	void OnProjectileHit();
+	
+	UFUNCTION(BlueprintCallable)
+	float GetDamage() const;
 
 	UFUNCTION(BlueprintCallable)
 	bool GetHasCollided() const;
@@ -45,6 +49,7 @@ public:
 	float Velocity = 1300.0f;
 	float DurationInSeconds = 2.0f;
 	float CurrentDuration = 0.0f;
+	float BaseDamage = 0.0f;
 
 	bool bFired = false;
 	bool bHasCollided = false;

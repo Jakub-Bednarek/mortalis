@@ -6,7 +6,6 @@
 #include "GameFramework/Pawn.h"
 
 #include "UI/Game/PlayerStatisticsHUD.h"
-#include "GameFramework/Statistics/PlayerStatisticsComponent.h"
 
 #include "ArcherCharacter.generated.h"
 
@@ -32,12 +31,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, category="Player/Movement")
 	void MoveRight();
-
-	UFUNCTION(BlueprintCallable, category="Player/Attack")
-	void NormalAttack();
-	
-	UFUNCTION(BlueprintCallable, category="Player/Attack")
-	void SpecialAttack();
 
 	UFUNCTION(BlueprintCallable, category="Player/Statistics")
 	void AddExperience(float Value);
@@ -70,32 +63,17 @@ public:
 private:
 	void ProcessFrameMovement(float DeltaTime);
 
-	void StartNormalAttackTimer();
-	void UpdateNormalAttackTimer(float DeltaTime);
-
-	// Update each second instead of tick? - may be bad for mana regen
-	// void ApplyHealthRegeneration(float DeltaTime);
-	// void ApplyManaRegeneration(float DeltaTime);
-
 	void UpdateExperienceHUD();
 	void LevelUpCharacter();
 
-	FVector CalculateAttackDirection() const;
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
 
 	double MovementSpeed = 400.0;
-	double AttacksPerSecond = 2.0;
 
 	int32 CurrentLevel = 1;
 	float ExperienceForNextLevel = 100.0f;
 	float CurrentExperience = 0.0f;
 
 	FVector ViewportCenter;
-
-	// Normal attack
-	float NormalAttackTimer = 0.0f;
-	bool bCanExecuteNormalAttack = true;
-
-	UPlayerStatisticsComponent* PlayerStatisticsComponent;
 };
