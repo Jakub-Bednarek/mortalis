@@ -25,9 +25,6 @@ void AArcherCharacter::BeginPlay()
 	// TODO: this should definitely not be here + doesn't get updated on viewport resize!
 	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
-
-	PlayerStatisticsHUD = (UPlayerStatisticsHUD*)(CreateWidget(UGameplayStatics::GetPlayerController(GetWorld(), 0), PlayerStatisticsHUDClass));
-	PlayerStatisticsHUD->AddToPlayerScreen();
 }
 
 // Called every frame
@@ -42,8 +39,8 @@ void AArcherCharacter::Tick(float DeltaTime)
 		UpdateNormalAttackTimer(DeltaTime);
 	}
 
-	ApplyHealthRegeneration(DeltaTime);
-	ApplyManaRegeneration(DeltaTime);
+	// ApplyHealthRegeneration(DeltaTime);
+	// ApplyManaRegeneration(DeltaTime);
 }
 
 void AArcherCharacter::MoveForward()
@@ -87,12 +84,12 @@ void AArcherCharacter::NormalAttack()
 
 void AArcherCharacter::SpecialAttack()
 {
-	if (not (CurrentMana >= SpecialAttackManaCost))
-	{
-		return;
-	}
+	// if (not (CurrentMana >= SpecialAttackManaCost))
+	// {
+	// 	return;
+	// }
 
-	CurrentMana -= SpecialAttackManaCost;
+	// CurrentMana -= SpecialAttackManaCost;
 
 	const auto Direction = CalculateAttackDirection();
 	auto TargetLocation = GetActorLocation() + (150.0f * Direction);
@@ -103,13 +100,13 @@ void AArcherCharacter::SpecialAttack()
 		SpawnedProjectile->Fire(CalculateAttackDirection());
 	}
 
-	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
+	// PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
 void AArcherCharacter::AddExperience(float Value)
 {
 	CurrentExperience += Value;
-	PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
 
 	if (CurrentExperience >= ExperienceForNextLevel)
 	{
@@ -133,7 +130,7 @@ void AArcherCharacter::LevelUpCharacter()
 
 void AArcherCharacter::UpdateExperienceHUD()
 {
-	PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
@@ -170,30 +167,30 @@ void AArcherCharacter::UpdateNormalAttackTimer(float DeltaTime)
 	}
 }
 
-void AArcherCharacter::ApplyHealthRegeneration(float DeltaTime)
-{
-	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
-	if (CurrentHealth >= MaxHealth)
-	{
-		return;
-	}
+// void AArcherCharacter::ApplyHealthRegeneration(float DeltaTime)
+// {
+// 	// PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
+// 	if (CurrentHealth >= MaxHealth)
+// 	{
+// 		return;
+// 	}
 
-	CurrentHealth += HealthRegenerationPerSecond * DeltaTime;
+// 	CurrentHealth += HealthRegenerationPerSecond * DeltaTime;
 
-	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
-}
+// 	// PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
+// }
 
-void AArcherCharacter::ApplyManaRegeneration(float DeltaTime)
-{
-	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
-	if (CurrentMana >= MaxMana)
-	{
-		return;
-	}
+// void AArcherCharacter::ApplyManaRegeneration(float DeltaTime)
+// {
+// 	// PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
+// 	if (CurrentMana >= MaxMana)
+// 	{
+// 		return;
+// 	}
 
-	CurrentMana += ManaRegenerationPerSecond * DeltaTime;
-	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
-}
+// 	CurrentMana += ManaRegenerationPerSecond * DeltaTime;
+// 	// PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
+// }
 
 // TODO: when mouse is in the corner projectiles have slight offset but when on Axis they're perfectly fine
 FVector AArcherCharacter::CalculateAttackDirection() const
