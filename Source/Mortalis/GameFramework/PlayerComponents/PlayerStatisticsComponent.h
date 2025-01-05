@@ -30,6 +30,9 @@ public:
 	void ChangeCurrentMana(float Delta);
 
 	UFUNCTION(BlueprintCallable)
+	void TakeDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable)
 	void ChangeMaxMana(float Delta);
 	
 	UFUNCTION(BlueprintCallable)

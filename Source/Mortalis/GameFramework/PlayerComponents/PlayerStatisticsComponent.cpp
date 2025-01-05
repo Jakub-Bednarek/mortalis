@@ -43,6 +43,18 @@ void UPlayerStatisticsComponent::ChangeMaxHealth(const float Delta)
 	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
 }
 
+void UPlayerStatisticsComponent::TakeDamage(const float Damage)
+{
+	if (Damage < 0.0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("TakeDamage(): Damage must be greater or equal 0."));
+		return;
+	}
+
+	CurrentHealth -= Damage;
+	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
+}
+
 void UPlayerStatisticsComponent::ChangeCurrentMana(const float Delta)
 {
 	CurrentMana += Delta;
