@@ -64,11 +64,6 @@ void AArcherCharacter::AddExperience(float Value)
 	if (CurrentExperience >= ExperienceForNextLevel)
 	{
 		LevelUpCharacter();
-
-		if (OnCharacterLevelUp.IsBound())
-		{
-			OnCharacterLevelUp.Broadcast(CurrentLevel);
-		}
 	}
 }
 

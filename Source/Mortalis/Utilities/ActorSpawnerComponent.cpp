@@ -43,13 +43,13 @@ void UActorSpawnerComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 }
 
 
-void UActorSpawnerComponent::AddActorToSpawnPool(TSubclassOf<class UObject> Actor)
+void UActorSpawnerComponent::AddActorToSpawnPool(TSubclassOf<AEnemyBase> Actor)
 {
 	ActorsSpawnPool.Add(Actor);
 }
 
 
-void UActorSpawnerComponent::SetActorSpawnPool(TArray<TSubclassOf<class UObject>> Actors)
+void UActorSpawnerComponent::SetActorSpawnPool(TArray<TSubclassOf<AEnemyBase>> Actors)
 {
 	if (Actors.Num() == 0)
 	{
@@ -150,7 +150,7 @@ void UActorSpawnerComponent::SpawnWithNavMeshSelectionEnabled()
 
 		// TODO: change hardcode for half of target height
 		SelectedSpawnLocation.Location.Z += 32.0f;
-		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), SelectedSpawnLocation.Location, FRotator(0.0f)));
+		SpawnActor(SelectRandomActor(),  SelectedSpawnLocation.Location);
 	}
 }
 
@@ -158,8 +158,16 @@ void UActorSpawnerComponent::SpawnWithStaticPosition()
 {
 	for (int32 i = 0; i < ActorsSpawnCount; i++)
 	{
-		SpawnedActors.Add(GetWorld()->SpawnActor<AActor>(ActorsSpawnPool[SelectRandomActor()].Get(), RootLocation, FRotator(0.0f)));
+		SpawnActor(SelectRandomActor(), RootLocation);
 	}
+}
+
+void UActorSpawnerComponent::SpawnActor(const int32 Index, const FVector& Location)
+{
+	auto SpawnedEnemy = GetWorld()->SpawnActor<AEnemyBase>(ActorsSpawnPool[Index].Get(), Location, FRotator(0.0f));
+	SpawnedEnemy->OnDeathEvent.AddDynamic(ExperienceSystem, &AExperienceSystem::AddExperience);
+
+	SpawnedActors.Add(SpawnedEnemy);
 }
 
 bool UActorSpawnerComponent::ShouldSpawnActors(const float DeltaTime)

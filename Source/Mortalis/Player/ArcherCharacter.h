@@ -9,7 +9,6 @@
 
 #include "ArcherCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLevelUp, int32, Level);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyHit, float, Damage);
 
 UCLASS()
@@ -47,10 +46,7 @@ public:
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
 
 	// Delegates
-	UPROPERTY(BLueprintCallable, BlueprintAssignable)
-	FOnCharacterLevelUp OnCharacterLevelUp;
-
-	UPROPERTY(BLueprintCallable, BlueprintAssignable)
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnEnemyHit OnEnemyHit;
 
 protected:

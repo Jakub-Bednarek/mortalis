@@ -2,9 +2,11 @@
 
 #pragma once
 
+#include "GameFramework/Systems/ExperienceSystem.h"
+#include "GameFramework/Enemies/EnemyBase.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-
 #include "NavMesh/RecastNavMesh.h"
 
 #include "ActorSpawnerComponent.generated.h"
@@ -23,10 +25,10 @@ public:
 
 	// Spawner Configuration
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration", meta = (DeterminesOutputType = "ObjClass"))
-	void AddActorToSpawnPool(TSubclassOf<class UObject> Actor);
+	void AddActorToSpawnPool(TSubclassOf<AEnemyBase> Actor);
 
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
-	void SetActorSpawnPool(TArray<TSubclassOf<class UObject>> Actors);
+	void SetActorSpawnPool(TArray<TSubclassOf<AEnemyBase>> Actors);
 
 	UFUNCTION(BlueprintCallable, Category="Spawn/Configuration")
 	void EnablePeriodicSpawn(float IntervalInSeconds, int32 Waves);
@@ -59,6 +61,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Spawn/Action")
 	float GetTimeToNextSpawn() const;
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AExperienceSystem* ExperienceSystem;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -68,14 +74,15 @@ public:
 private:
 	void SpawnWithNavMeshSelectionEnabled();
 	void SpawnWithStaticPosition();
+	void SpawnActor(int32 Index, const FVector& Location);
 
 	bool ShouldSpawnActors(float DeltaTime);
 
 	int32 SelectRandomActor() const;
 
 private:
-	TArray<TSubclassOf<class UObject>> ActorsSpawnPool;
-	TArray<AActor*> SpawnedActors = {};
+	TArray<TSubclassOf<AEnemyBase>> ActorsSpawnPool;
+	TArray<AEnemyBase*> SpawnedActors = {};
 
 	FVector RootLocation = {};
 

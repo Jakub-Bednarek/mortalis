@@ -11,7 +11,7 @@
 #include "EnemyHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDamageTaken);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnZeroHealth);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -40,7 +40,7 @@ public:
 	FOnDamageTaken OnDamageTaken;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnDeath OnDeath;
+	FOnZeroHealth OnZeroHealth;
 
 protected:
 	virtual void BeginPlay() override;

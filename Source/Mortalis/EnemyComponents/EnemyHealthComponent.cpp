@@ -60,9 +60,9 @@ void UEnemyHealthComponent::TakeDamage(const float Damage)
 		CurrentHealth = 0.0f;
 		bIsAlive = false;
 
-		if(OnDeath.IsBound())
+		if(OnZeroHealth.IsBound())
 		{
-			OnDeath.Broadcast();
+			OnZeroHealth.Broadcast();
 		}
 	}
 
