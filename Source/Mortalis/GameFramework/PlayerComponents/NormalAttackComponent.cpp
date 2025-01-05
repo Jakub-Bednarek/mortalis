@@ -53,6 +53,7 @@ void UNormalAttackComponent::UpdateAttackCooldown(const float DeltaTime)
 void UNormalAttackComponent::ExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics)
 {
 	const auto Direction = CalculateAttackDirection();
+	// TODO: change hardcoded offset to var
 	auto TargetLocation = GetOwner()->GetActorLocation() + (150.0f * Direction);
 	auto* SpawnedProjectile = (ABasicProjectile*)GetWorld()->SpawnActor<AActor>(NormalProjectile, TargetLocation, FRotator(0.0f));
 

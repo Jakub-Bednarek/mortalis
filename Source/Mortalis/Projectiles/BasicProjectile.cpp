@@ -2,6 +2,7 @@
 
 
 #include "BasicProjectile.h"
+#include "GameFramework/Types/CollisionSource.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -116,4 +117,9 @@ void ABasicProjectile::CalculateCurrentDuration(const float DeltaTime)
 bool ABasicProjectile::bIsExpired() const
 {
 	return CurrentDuration >= DurationInSeconds;
+}
+
+void ABasicProjectile::OnCollisionEnter(const CollisionSource)
+{
+	UE_LOG(LogTemp, Log, TEXT("FUCK YEAH"));
 }

@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "GameFramework/Types/CollisionSource.h"
+
 #include "BasicProjectile.generated.h"
 
 UCLASS()
@@ -29,6 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool GetHasCollided() const;
+
+	UFUNCTION(BlueprintCallable)
+	void OnCollisionEnter(const CollisionSource Source);
 
 protected:
 	// Called when the game starts or when spawned

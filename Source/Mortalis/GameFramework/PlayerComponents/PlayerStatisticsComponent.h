@@ -31,6 +31,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeMaxMana(float Delta);
+	
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentHealth() const;
+	
+	UFUNCTION(BlueprintCallable)
+	float GetCurrentMana() const;
 
 	UFUNCTION(BlueprintCallable)
 	float GetAttacksPerSecond() const;
@@ -44,6 +50,9 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
+
+private:
+	void ApplyRegenerations(float DeltaTime);
 
 private:
 	TObjectPtr<UPlayerStatisticsHUD> PlayerStatisticsHUD;

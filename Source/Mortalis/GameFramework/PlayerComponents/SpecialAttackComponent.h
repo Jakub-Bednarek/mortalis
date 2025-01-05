@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
+#include "Projectiles/BasicProjectile.h"
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
@@ -20,8 +21,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void Execute(const UPlayerStatisticsComponent* PlayerStatistics);
+	void Execute(UPlayerStatisticsComponent* PlayerStatistics);
+
+public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
+	TSubclassOf<ABasicProjectile> SpecialProjectile {};
 
 protected:
 	virtual void BeginPlay() override;		
+
+private:
+	void ExecuteAttack(UPlayerStatisticsComponent* PlayerStatistics);
+
+	bool CanExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics) const;
+		
+	FVector CalculateAttackDirection() const;
+
+private:
+	float AttackManaCost = 50.0f;
+
+	FVector ViewportCenter;
 };
