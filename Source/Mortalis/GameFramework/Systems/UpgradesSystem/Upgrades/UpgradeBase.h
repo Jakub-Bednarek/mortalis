@@ -9,6 +9,22 @@
 
 #include "UpgradeBase.generated.h"
 
+USTRUCT()
+struct FUpgradeBaseData
+{
+	GENERATED_BODY()
+};
+
+USTRUCT()
+struct FUpgradeUIData
+{
+	GENERATED_BODY()
+
+	FName Name;
+
+	// Icon, Description etc
+};
+
 UCLASS(Abstract)
 class MORTALIS_API AUpgradeBase : public AActor
 {
@@ -28,4 +44,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FUpgradeBaseData BaseData;
+	FUpgradeUIData UIData;
 };

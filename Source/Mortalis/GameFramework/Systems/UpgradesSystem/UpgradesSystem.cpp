@@ -2,34 +2,56 @@
 
 
 #include "UpgradesSystem.h"
+
+#include "Engine/GameViewportClient.h"
+#include "Internationalization/Internationalization.h"
+#include "Rendering/SlateRenderTransform.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+
 #include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
 
-// Sets default values
 AUpgradesSystem::AUpgradesSystem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
-// Called when the game starts or when spawned
 void AUpgradesSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	check(ExperienceSystem);
 
-	ExperienceSystem->OnCharacterLevelUp.AddDynamic(this, &AUpgradesSystem::ProcessCharacterLevelUp);
+	ExperienceSystem->OnCharacterLevelUp.AddDynamic(this, &AUpgradesSystem::StartUpgradeProcedure);
+
+	UpgradeSelectionWidget = SNew(SUpgradeSelectionWidget);
+	UpgradeSelectionWidget->OnOptionSelectedEvent.AddUObject(this, &AUpgradesSystem::OnUpgradeSelected);
 }
 
 // Called every frame
 void AUpgradesSystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AUpgradesSystem::RegisterUpgrade()
+{
 
 }
 
-void AUpgradesSystem::ProcessCharacterLevelUp(const uint32 Level)
+void AUpgradesSystem::StartUpgradeProcedure(const uint32)
 {
-	UE_LOG(LogTemp, Log, TEXT("Hell yeah level up: %d"), Level);
+	GenerateRandomUpgrades();
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	UpgradeSelectionWidget->ShowSelectionMenu(TArray<FText>{NSLOCTEXT("Upgrades", "Up1", "Upgrade1"), NSLOCTEXT("Upgrades", "Up2", "Upgrade2"), NSLOCTEXT("Upgrades", "Up3", "Upgrade3")});
+}
+
+void AUpgradesSystem::OnUpgradeSelected(const UpgradeChoice)
+{
+	UpgradeSelectionWidget->HideSelectionMenu();
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
+}
+
+void AUpgradesSystem::GenerateRandomUpgrades()
+{
+
 }
