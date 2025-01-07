@@ -25,6 +25,8 @@ void AUpgradesSystem::BeginPlay()
 
 	UpgradeSelectionWidget = SNew(SUpgradeSelectionWidget);
 	UpgradeSelectionWidget->OnOptionSelectedEvent.AddUObject(this, &AUpgradesSystem::OnUpgradeSelected);
+
+	Upgrade = NewObject<UUpgrade>(UUpgrade::StaticClass());
 }
 
 // Called every frame
@@ -49,6 +51,11 @@ void AUpgradesSystem::OnUpgradeSelected(const UpgradeChoice)
 {
 	UpgradeSelectionWidget->HideSelectionMenu();
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+	if (OnUpgradeGenerated.IsBound() and Upgrade != nullptr)
+	{
+		OnUpgradeGenerated.Broadcast(Upgrade);
+	}
 }
 
 void AUpgradesSystem::GenerateRandomUpgrades()

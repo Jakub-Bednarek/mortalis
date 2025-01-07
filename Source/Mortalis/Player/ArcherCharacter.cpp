@@ -2,6 +2,10 @@
 
 
 #include "ArcherCharacter.h"
+#include "GameFramework/PlayerComponents/NormalAttackComponent.h"
+#include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
+#include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
+#include "Logging/LogMacros.h"
 #include "Projectiles/BasicProjectile.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -15,16 +19,34 @@ AArcherCharacter::AArcherCharacter()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	PlayerStatisticsComponent = CreateDefaultSubobject<UPlayerStatisticsComponent>(TEXT("Statistics Component"));
+	NormalAttackComponent = CreateDefaultSubobject<UNormalAttackComponent>(TEXT("Normal attack Component"));
+	SpecialAttackComponent = CreateDefaultSubobject<USpecialAttackComponent>(TEXT("Special attack Component"));
 }
 
 // Called when the game starts or when spawned
 void AArcherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// TODO: this should definitely not be here + doesn't get updated on viewport resize!
-	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
+
+	TArray<AActor*> UpgradesSystemActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Upgrades System"), UpgradesSystemActors);
+
+	if (UpgradesSystemActors.Num() > 1 or UpgradesSystemActors.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("More than 1 or 0 actor with Upgrades System tag"));
+		return;
+	}
+
+	AUpgradesSystem* UpgradesSystem = (AUpgradesSystem*)(UpgradesSystemActors[0]);
+	if (UpgradesSystem != nullptr)
+	{
+		UpgradesSystem->OnUpgradeGenerated.AddDynamic(this, &AArcherCharacter::ConsumeUpgrade);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to bind to UpgradesSystem::OnUpgradeGEnerated delegate."));
+	}
 }
 
 // Called every frame
@@ -79,6 +101,11 @@ void AArcherCharacter::LevelUpCharacter()
 void AArcherCharacter::UpdateExperienceHUD()
 {
 	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+}
+
+void AArcherCharacter::ConsumeUpgrade(UUpgrade* Upgrade)
+{
+	UE_LOG(LogTemp, Log, TEXT("We drippin' biatch"));
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)

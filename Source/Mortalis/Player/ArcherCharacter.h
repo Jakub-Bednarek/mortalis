@@ -7,6 +7,11 @@
 
 #include "UI/Game/PlayerStatisticsHUD.h"
 
+#include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
+#include "GameFramework/PlayerComponents/NormalAttackComponent.h"
+#include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
+#include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
+
 #include "ArcherCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyHit, float, Damage);
@@ -35,13 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable, category="Player/Statistics")
 	void AddExperience(float Value);
 
+	UFUNCTION()
+	void ConsumeUpgrade(UUpgrade* Upgrade);
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
-	TSubclassOf<AActor> NormalProjectile {};
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
-	TSubclassOf<AActor> SpecialProjectile {};
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
 
@@ -49,6 +50,14 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnEnemyHit OnEnemyHit;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPlayerStatisticsComponent* PlayerStatisticsComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UNormalAttackComponent* NormalAttackComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USpecialAttackComponent* SpecialAttackComponent;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
