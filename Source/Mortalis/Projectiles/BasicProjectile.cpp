@@ -121,5 +121,5 @@ bool ABasicProjectile::bIsExpired() const
 
 void ABasicProjectile::OnCollisionEnter(const CollisionSource)
 {
-	UE_LOG(LogTemp, Log, TEXT("FUCK YEAH"));
+
 }

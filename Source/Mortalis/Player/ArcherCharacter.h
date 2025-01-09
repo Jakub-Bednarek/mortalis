@@ -10,7 +10,6 @@
 #include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
-#include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
 
 #include "ArcherCharacter.generated.h"
 
@@ -39,9 +38,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, category="Player/Statistics")
 	void AddExperience(float Value);
-
-	UFUNCTION()
-	void ConsumeUpgrade(UUpgrade* Upgrade);
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;

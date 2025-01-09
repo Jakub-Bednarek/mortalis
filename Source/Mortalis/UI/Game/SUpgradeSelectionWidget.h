@@ -2,14 +2,10 @@
 
 #pragma once
 
-#include "GAmeFramework/Types/UpgradeChoice.h"
-
 #include "Widgets/Input/SButton.h"
 #include "CoreMinimal.h"
 
 #include "Widgets/SCompoundWidget.h"
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnOptionSelectedEvent, UpgradeChoice);
 
 /**
  * 
@@ -41,9 +37,6 @@ public:
 
 	UFUNCTION()
 	FText GetThirdOptionName() const;
-
-	UPROPERTY()
-	FOnOptionSelectedEvent OnOptionSelectedEvent;
 
 private:
 	void FillArrayWithDummyData();

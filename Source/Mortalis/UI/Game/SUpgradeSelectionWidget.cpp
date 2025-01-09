@@ -60,15 +60,6 @@ void SUpgradeSelectionWidget::Construct(const FArguments& InArgs)
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
-void SUpgradeSelectionWidget::OnOptionSelected()
-{
-	if(OnOptionSelectedEvent.IsBound())
-	{
-		// TODO: Bad, should return ID of option selected
-		OnOptionSelectedEvent.Broadcast(UpgradeChoice::First);
-	}
-}
-
 FText SUpgradeSelectionWidget::GetFirstOptionName() const
 {
 	return OptionNamesToSelect[0];

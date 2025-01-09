@@ -36,8 +36,6 @@ void AExperienceSystem::AddExperience(const int32 Experience)
 	{
 		LevelUp();
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("EXPERIENCE BUDDY: %d"), CurrentExperience);
 }
 
 bool AExperienceSystem::CanLevelUp() const

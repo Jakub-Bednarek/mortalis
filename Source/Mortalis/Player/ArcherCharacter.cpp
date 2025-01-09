@@ -28,25 +28,6 @@ AArcherCharacter::AArcherCharacter()
 void AArcherCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TArray<AActor*> UpgradesSystemActors;
-	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Upgrades System"), UpgradesSystemActors);
-
-	if (UpgradesSystemActors.Num() > 1 or UpgradesSystemActors.Num() == 0)
-	{
-		UE_LOG(LogTemp, Error, TEXT("More than 1 or 0 actor with Upgrades System tag"));
-		return;
-	}
-
-	AUpgradesSystem* UpgradesSystem = (AUpgradesSystem*)(UpgradesSystemActors[0]);
-	if (UpgradesSystem != nullptr)
-	{
-		UpgradesSystem->OnUpgradeGenerated.AddDynamic(this, &AArcherCharacter::ConsumeUpgrade);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to bind to UpgradesSystem::OnUpgradeGEnerated delegate."));
-	}
 }
 
 // Called every frame
@@ -101,11 +82,6 @@ void AArcherCharacter::LevelUpCharacter()
 void AArcherCharacter::UpdateExperienceHUD()
 {
 	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
-}
-
-void AArcherCharacter::ConsumeUpgrade(UUpgrade* Upgrade)
-{
-	UE_LOG(LogTemp, Log, TEXT("We drippin' biatch"));
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
