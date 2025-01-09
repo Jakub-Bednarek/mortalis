@@ -35,6 +35,7 @@ private:
 	void LevelUp();
 
 private:
+	// this part could make use of some strategy pattern
 	int32 CurrentLevel = 0;
 
 	int32 CurrentExperience = 0;
