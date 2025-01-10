@@ -32,12 +32,16 @@ public:
 	AUpgradesSystem();
 
 	virtual void Tick(float DeltaTime) override;
+
 public:
 	UPROPERTY()
 	AExperienceSystem* ExperienceSystem;
 
 protected:
 	virtual void BeginPlay() override;
+
+private:
+	void RegisterHealthUpgradeChain();
 
 private:
 	UpgradesPool<UStatisticsComponentUpgrade> StatisticsUpgradesPool;

@@ -2,6 +2,7 @@
 
 
 #include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
+#include "Upgrades/HealthUpgrade.h"
 
 // Sets default values
 AUpgradesSystem::AUpgradesSystem()
@@ -16,6 +17,7 @@ void AUpgradesSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	RegisterHealthUpgradeChain();
 }
 
 // Called every frame
@@ -25,3 +27,7 @@ void AUpgradesSystem::Tick(float DeltaTime)
 
 }
 
+void AUpgradesSystem::RegisterHealthUpgradeChain()
+{
+	auto Upgrade = UpgradeFactory::Create<UHealthUpgrade>();
+}

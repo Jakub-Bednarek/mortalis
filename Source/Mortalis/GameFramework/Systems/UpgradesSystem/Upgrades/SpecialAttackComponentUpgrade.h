@@ -14,13 +14,15 @@
  */
 
 UCLASS()
-class USpecialAttackComponentUpgrade : public UObject, public UpgradeBase<USpecialAttackComponent>
+class USpecialAttackComponentUpgrade : public UObject, public UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>
 {
     GENERATED_BODY()
 
 public:
+    using Builder = UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>::Builder;
+
     USpecialAttackComponentUpgrade() = default;
     virtual ~USpecialAttackComponentUpgrade() = default;
     
-    virtual void Apply(USpecialAttackComponent*) override {}
+    virtual void Apply(USpecialAttackComponent*) const override {}
 };

@@ -14,13 +14,15 @@
  */
 
 UCLASS()
-class USkillComponentUpgrade : public UObject, public UpgradeBase<USkillComponent>
+class USkillComponentUpgrade : public UObject, public UpgradeBase<USkillComponent, USkillComponentUpgrade>
 {
     GENERATED_BODY()
 
 public:
+    using Builder = UpgradeBase<USkillComponent, USkillComponentUpgrade>::Builder;
+
     USkillComponentUpgrade() = default;
     virtual ~USkillComponentUpgrade() = default;
 
-    virtual void Apply(USkillComponent*) override {}
+    virtual void Apply(USkillComponent*) const override {}
 };

@@ -14,13 +14,15 @@
  */
 
 UCLASS()
-class UStatisticsComponentUpgrade : public UObject, public UpgradeBase<UPlayerStatisticsComponent>
+class UStatisticsComponentUpgrade : public UObject, public UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>
 {
     GENERATED_BODY()
 
 public:
+    using Builder = UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>::Builder;
+
     UStatisticsComponentUpgrade() = default;
     virtual ~UStatisticsComponentUpgrade() = default;
     
-    virtual void Apply(UPlayerStatisticsComponent*) override {}
+    virtual void Apply(UPlayerStatisticsComponent*) const override {}
 };

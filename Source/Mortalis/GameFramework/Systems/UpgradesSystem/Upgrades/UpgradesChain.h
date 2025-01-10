@@ -11,9 +11,11 @@
 template <typename T>
 struct Chain
 {
-    // Add enable_if to check if U is base class of T
-    template <typename U>
-    void RegisterUpgrade() {};
+    template <typename T>
+    void RegisterUpgrade(T* Upgrade) 
+    {
+        Upgrades.Push(Upgrade);
+    };
 
 private:
     TArray<T*> Upgrades;
