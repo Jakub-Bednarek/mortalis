@@ -19,7 +19,8 @@ class USpecialAttackComponentUpgrade : public UObject, public UpgradeBase<USpeci
     GENERATED_BODY()
 
 public:
-    using Builder = UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>::Builder;
+    using BaseType = UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>;
+    using Builder  = BaseType::Builder;
 
     USpecialAttackComponentUpgrade() = default;
     virtual ~USpecialAttackComponentUpgrade() = default;

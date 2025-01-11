@@ -19,7 +19,8 @@ class UStatisticsComponentUpgrade : public UObject, public UpgradeBase<UPlayerSt
     GENERATED_BODY()
 
 public:
-    using Builder = UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>::Builder;
+    using BaseType = UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>;
+    using Builder  = BaseType::Builder;
 
     UStatisticsComponentUpgrade() = default;
     virtual ~UStatisticsComponentUpgrade() = default;

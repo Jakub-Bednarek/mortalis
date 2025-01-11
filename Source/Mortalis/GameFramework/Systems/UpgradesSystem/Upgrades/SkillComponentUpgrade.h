@@ -19,7 +19,8 @@ class USkillComponentUpgrade : public UObject, public UpgradeBase<USkillComponen
     GENERATED_BODY()
 
 public:
-    using Builder = UpgradeBase<USkillComponent, USkillComponentUpgrade>::Builder;
+    using BaseType = UpgradeBase<USkillComponent, USkillComponentUpgrade>;
+    using Builder = BaseType::Builder;
 
     USkillComponentUpgrade() = default;
     virtual ~USkillComponentUpgrade() = default;

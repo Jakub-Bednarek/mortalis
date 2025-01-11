@@ -12,17 +12,17 @@ template <typename T, T Min, T Max>
 class IndexGenerator
 {
 public:
-    T Get()
+    T Next()
     {
-        if (Next > Max)
+        if (NextVal > Max)
         {
             assert(false && "Index generator exhausted given range");
             return Max;
         }
 
-        return Next++;
+        return NextVal++;
     }
 
 private:
-    T Next = Min;
+    T NextVal = Min;
 };

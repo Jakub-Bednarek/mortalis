@@ -10,18 +10,22 @@
 #include "Upgrades/SkillComponentUpgrade.h"
 
 #include "GameFramework/Systems/ExperienceSystem.h"
+#include "GameFramework/Types/UpgradeCategory.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "UpgradesSystem.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE(FOnUpgradeProcedureBegin);
-DECLARE_DYNAMIC_DELEGATE(FOnUpgradeProcedureEnd);
+// Whole upgrade procedure is gonna be like a fucking ping pong of events, not a fan of that
+// We're exchanging (most likely) a performance hit for low coupling :/
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpgradeProcedureBegin, const TArray<FUpgradeUIData>&, RandomUpgradesUIData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpgradeProcedureEnd);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStatisticsComponentUpgradeSelected, UStatisticsComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNormalAtatckComponentUpgradeSelected, UStatisticsComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpecialAttackComponentUpgradeSelected, UStatisticsComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUpgradeSelected, UStatisticsComponentUpgrade*, Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNormalAtatckComponentUpgradeSelected, UNormalAttackComponentUpgrade*, Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpecialAttackComponentUpgradeSelected, USpecialAttackComponentUpgrade*, Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUpgradeSelected, USkillComponentUpgrade*, Upgrade);
 
 UCLASS()
 class MORTALIS_API AUpgradesSystem : public AActor
@@ -34,16 +38,47 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	AExperienceSystem* ExperienceSystem;
+
+	UPROPERTY()
+	FOnUpgradeProcedureBegin OnUpgradeProcedureBegin;
+	
+	UPROPERTY()
+	FOnUpgradeProcedureEnd OnUpgradeProcedureEnd;
+
+	UPROPERTY()
+	FOnStatisticsComponentUpgradeSelected OnStatisticsComponentUpgradeSelected;
+
+	UPROPERTY()
+	FOnNormalAtatckComponentUpgradeSelected OnNormalAtatckComponentUpgradeSelected;
+
+	UPROPERTY()
+	FOnSpecialAttackComponentUpgradeSelected OnSpecialAttackComponentUpgradeSelected;
+
+	UPROPERTY()
+	FOnSkillUpgradeSelected OnSkillUpgradeSelected;
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count);
+
+	EUpgradeCategory GetRandomUpgradeCategory() const;
+
+	UFUNCTION()
+	void StartUpgradeProcedure(uint32 Level);
+
+	void FinishUpgradeProcedure();
+
 	void RegisterHealthUpgradeChain();
 
 private:
+	static constexpr uint8 DefaultNumberOfUpgradesToGenerate = 3;
+
+	int64 UpgradeCategoryEntriesCount = 0;
+
 	UpgradesPool<UStatisticsComponentUpgrade> StatisticsUpgradesPool;
 	UpgradesPool<UNormalAttackComponentUpgrade> NormalAttackUpgradesPool;
 	UpgradesPool<USpecialAttackComponentUpgrade> SpecialAttackUpgradesPool;

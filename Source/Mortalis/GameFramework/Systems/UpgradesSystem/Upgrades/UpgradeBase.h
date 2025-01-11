@@ -7,11 +7,11 @@
 template <typename T>
 class UpgradeBaseBuilder;
 
-// consider switching concrete classes from UCLASS to USTRUCT if delegates allow such operation
-// allocation object on heap seems like a waste and most of them are gonna act only as functor
-// or will contain class of concrete spell that should be instantiated in game, no need to keep it in pure data types for upgrades
+// can't switch child types to USTRUCT() if base class is not a USTRUCT which is not possible as UpgradeBase is a template type
+// the only need for USTRUCT/UCLASS is to be able to push it as delegate param, creating another wrapper is like bullshit
+// cause we would need to make one for each type of upgrade -> bad
 template <typename T, typename U>
-class UpgradeBase
+struct UpgradeBase
 {
     friend class UpgradeBaseBuilder<U>;
 public:
@@ -27,7 +27,7 @@ public:
         return Description;
     }
 
-    FUpgradeUIData GetUpgradeUIData()
+    FUpgradeUIData GetUIData()
     {
         return {
             Index,
@@ -47,15 +47,15 @@ private:
 class UpgradeFactory
 {
 public:
-    // not sure about template, maybe 4 separate functions would suit it better?
     template <typename T>
     static T::Builder Create()
     {
-        constexpr int32 SKILL_INDEX_UPPER_RANGE = 256;
-        static IndexGenerator<FUpgradeIndex, FUpgradeIndex{0}, FUpgradeIndex{SKILL_INDEX_UPPER_RANGE}> Generator {};
+        constexpr FUpgradeIndex SKILL_INDEX_LOWER_RANGE { 0 };
+        constexpr FUpgradeIndex SKILL_INDEX_UPPER_RANGE { 256 };
+        static IndexGenerator<FUpgradeIndex, SKILL_INDEX_LOWER_RANGE, SKILL_INDEX_UPPER_RANGE> Generator {};
 
         auto* UpgradeInstance = NewObject<T>();
-        return { Generator.Get() , UpgradeInstance };
+        return { Generator.Next(), UpgradeInstance };
     }
 };
 
@@ -63,11 +63,11 @@ template <typename T>
 class UpgradeBaseBuilder
 {
 public:
-    UpgradeBaseBuilder(const FUpgradeIndex Index, T* Target)
+    UpgradeBaseBuilder(FUpgradeIndex&& Index, T* Target)
         : Target(Target)
     {
         assert(Target);
-        Target->Index = Index;
+        Target->Index = MoveTemp(Index);
     }
 
     UpgradeBaseBuilder& WithName(FName Name) { Target->Name = MoveTemp(Name); }

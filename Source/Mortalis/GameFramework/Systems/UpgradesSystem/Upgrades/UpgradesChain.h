@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "GameFramework/Types/UpgradeCategory.h"
+
 #include "CoreMinimal.h"
 
 /**
@@ -17,6 +19,28 @@ struct Chain
         Upgrades.Push(Upgrade);
     };
 
+    void SetCategory(EUpgradeCategory NewCategory)
+    {
+        Category = NewCategory;
+    }
+
+    bool IsExhausted() const
+    {
+        return bIsExhausted;
+    }
+
+    T* GetNext()
+    {
+        check(Upgrades.Num() > 0);
+
+        // TODO: correct index for extraction;
+        return Upgrades[0];
+    }
+
 private:
     TArray<T*> Upgrades;
+
+    EUpgradeCategory Category;
+
+    bool bIsExhausted = false;
 };

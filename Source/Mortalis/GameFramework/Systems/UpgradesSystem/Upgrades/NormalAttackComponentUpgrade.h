@@ -19,7 +19,8 @@ class UNormalAttackComponentUpgrade : public UObject, public UpgradeBase<UNormal
     GENERATED_BODY()
 
 public:
-    using Builder = UpgradeBase<UNormalAttackComponent, UNormalAttackComponentUpgrade>::Builder;
+    using BaseType = UpgradeBase<UNormalAttackComponent, UNormalAttackComponentUpgrade>;
+    using Builder = BaseType::Builder;
 
     UNormalAttackComponentUpgrade() = default;
     virtual ~UNormalAttackComponentUpgrade() = default;
