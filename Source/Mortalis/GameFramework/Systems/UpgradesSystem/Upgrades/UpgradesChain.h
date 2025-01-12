@@ -19,28 +19,23 @@ struct Chain
         Upgrades.Push(Upgrade);
     };
 
-    void SetCategory(EUpgradeCategory NewCategory)
-    {
-        Category = NewCategory;
-    }
-
     bool IsExhausted() const
     {
         return bIsExhausted;
     }
 
-    T* GetNext()
+    T* GetNextCandidate()
     {
         check(Upgrades.Num() > 0);
+        check(not bIsExhausted);
 
         // TODO: correct index for extraction;
         return Upgrades[0];
     }
 
 private:
+    // TODO: check if stability of elements guaranteed?
     TArray<T*> Upgrades;
-
-    EUpgradeCategory Category;
 
     bool bIsExhausted = false;
 };

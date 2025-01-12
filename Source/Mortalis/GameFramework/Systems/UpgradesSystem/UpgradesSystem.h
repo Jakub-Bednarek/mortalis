@@ -12,12 +12,14 @@
 #include "GameFramework/Systems/ExperienceSystem.h"
 #include "GameFramework/Types/UpgradeCategory.h"
 
+#include "UI/Game/UpgradeSelectionWidget.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "UpgradesSystem.generated.h"
 
 // Whole upgrade procedure is gonna be like a fucking ping pong of events, not a fan of that
-// We're exchanging (most likely) a performance hit for low coupling :/
+// We're exchanging (most likely) a performance for low coupling :/
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpgradeProcedureBegin, const TArray<FUpgradeUIData>&, RandomUpgradesUIData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpgradeProcedureEnd);
@@ -59,6 +61,9 @@ public:
 	UPROPERTY()
 	FOnSkillUpgradeSelected OnSkillUpgradeSelected;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UUpgradeSelectionWidget> UpgradeSelectionWidgetClass;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -70,7 +75,7 @@ private:
 	UFUNCTION()
 	void StartUpgradeProcedure(uint32 Level);
 
-	void FinishUpgradeProcedure();
+	void FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory);
 
 	void RegisterHealthUpgradeChain();
 
@@ -78,6 +83,8 @@ private:
 	static constexpr uint8 DefaultNumberOfUpgradesToGenerate = 3;
 
 	int64 UpgradeCategoryEntriesCount = 0;
+
+	UUpgradeSelectionWidget* UpgradeSelectionWidget;
 
 	UpgradesPool<UStatisticsComponentUpgrade> StatisticsUpgradesPool;
 	UpgradesPool<UNormalAttackComponentUpgrade> NormalAttackUpgradesPool;

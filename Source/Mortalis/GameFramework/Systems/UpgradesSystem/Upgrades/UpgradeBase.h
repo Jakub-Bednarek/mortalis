@@ -1,11 +1,22 @@
 #pragma once
 
 #include "GameFramework/Types/UpgradeIndex.h"
+#include "GameFramework/Types/UpgradeCategory.h"
 #include "GameFramework/Helpers/IndexGenerator.h"
 #include "UpgradeUIData.h"
 
+#include "CoreMinimal.h"
+
 template <typename T>
 class UpgradeBaseBuilder;
+
+UENUM()
+enum class UpgradeState : uint8
+{
+    Idle,
+    SelectionCandidate,
+    Selected
+};
 
 // can't switch child types to USTRUCT() if base class is not a USTRUCT which is not possible as UpgradeBase is a template type
 // the only need for USTRUCT/UCLASS is to be able to push it as delegate param, creating another wrapper is like bullshit
@@ -30,18 +41,20 @@ public:
     FUpgradeUIData GetUIData()
     {
         return {
-            Index,
             Name,
-            Description
+            Description,
+            Index,
+            Category
         };
     }
 
 protected:
 
 private:
-    FUpgradeIndex Index;
-    FName         Name;
-    FName         Description;
+    FName            Name;
+    FName            Description;
+    FUpgradeIndex    Index;
+    EUpgradeCategory Category;
 };
 
 class UpgradeFactory
@@ -55,7 +68,7 @@ public:
         static IndexGenerator<FUpgradeIndex, SKILL_INDEX_LOWER_RANGE, SKILL_INDEX_UPPER_RANGE> Generator {};
 
         auto* UpgradeInstance = NewObject<T>();
-        return { Generator.Next(), UpgradeInstance };
+        return { UpgradeInstance, Generator.Next() };
     }
 };
 
@@ -63,16 +76,18 @@ template <typename T>
 class UpgradeBaseBuilder
 {
 public:
-    UpgradeBaseBuilder(FUpgradeIndex&& Index, T* Target)
+    UpgradeBaseBuilder(T* Target, FUpgradeIndex&& Index)
         : Target(Target)
     {
         assert(Target);
         Target->Index = MoveTemp(Index);
     }
 
-    UpgradeBaseBuilder& WithName(FName Name) { Target->Name = MoveTemp(Name); }
+    UpgradeBaseBuilder& WithName(FName Name) { Target->Name = MoveTemp(Name); return *this; }
 
-    UpgradeBaseBuilder& WithDescription(FName Description) { Target->Description = MoveTemp(Description); }
+    UpgradeBaseBuilder& WithDescription(FName Description) { Target->Description = MoveTemp(Description); return *this; }
+
+    UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->Category = Category; return *this; }
 
     T* Build() { return Target; }
 private:

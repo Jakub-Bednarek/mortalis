@@ -2,9 +2,12 @@
 
 
 #include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
+#include "Components/SlateWrapperTypes.h"
 #include "GameFramework/Types/UpgradeCategory.h"
 #include "Upgrades/HealthUpgrade.h"
 #include "Upgrades/UpgradeUIData.h"
+
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 AUpgradesSystem::AUpgradesSystem()
 {
@@ -27,12 +30,22 @@ void AUpgradesSystem::BeginPlay()
 	}
 	
 	UpgradeCategoryEntriesCount = (StaticEnum<EUpgradeCategory>()->GetMaxEnumValue() - 1);
+
+	if (not UpgradeSelectionWidgetClass)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Upgrade Selection Widget class is not set."));
+	}
+	else
+	{
+		UpgradeSelectionWidget = (UUpgradeSelectionWidget*)(CreateWidget(UGameplayStatics::GetPlayerController(GetWorld(), 0), UpgradeSelectionWidgetClass));
+		UpgradeSelectionWidget->AddToPlayerScreen();
+		UpgradeSelectionWidget->HideSelectionMenu();
+	}
 }
 
 void AUpgradesSystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count)
@@ -75,7 +88,7 @@ EUpgradeCategory AUpgradesSystem::GetRandomUpgradeCategory() const
 
 void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 {
-	UE_LOG(LogTemp, Verbose, TEXT("Starting upgrade for level %d"), Level);
+	UE_LOG(LogTemp, Verbose, TEXT("Starting upgrade procedure for level %d."), Level);
 
 	auto GeneratedUpgradeChoicesData = GenerateUpgradeChoices(DefaultNumberOfUpgradesToGenerate);
 
@@ -83,10 +96,13 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 	{
 		OnUpgradeProcedureBegin.Broadcast(GeneratedUpgradeChoicesData);
 	}
+
+	UpgradeSelectionWidget->ShowSelectionMenu(GeneratedUpgradeChoicesData);
 }
 
-void AUpgradesSystem::FinishUpgradeProcedure()
+void AUpgradesSystem::FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory)
 {
+	UE_LOG(LogTemp, Verbose, TEXT("Finishing upgrade procedure."));
 	if (OnUpgradeProcedureEnd.IsBound())
 	{
 		OnUpgradeProcedureEnd.Broadcast();
