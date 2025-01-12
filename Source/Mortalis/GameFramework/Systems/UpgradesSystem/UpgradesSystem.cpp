@@ -40,6 +40,8 @@ void AUpgradesSystem::BeginPlay()
 		UpgradeSelectionWidget = (UUpgradeSelectionWidget*)(CreateWidget(UGameplayStatics::GetPlayerController(GetWorld(), 0), UpgradeSelectionWidgetClass));
 		UpgradeSelectionWidget->AddToPlayerScreen();
 		UpgradeSelectionWidget->HideSelectionMenu();
+		UpgradeSelectionWidget->InitializeBindings();
+		UpgradeSelectionWidget->OnOptionSelectedEvent.BindDynamic(this, &AUpgradesSystem::FinishUpgradeProcedure);
 	}
 }
 
@@ -107,6 +109,8 @@ void AUpgradesSystem::FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory)
 	{
 		OnUpgradeProcedureEnd.Broadcast();
 	}
+
+	UpgradeSelectionWidget->HideSelectionMenu();
 }
 
 void AUpgradesSystem::RegisterHealthUpgradeChain()

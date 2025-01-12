@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "UI/Components/UpgradeSelectionCard.h"
+
 #include "GameFramework/Systems/UpgradesSystem/Upgrades/UpgradeUIData.h"
 #include "GameFramework/Types/UpgradeIndex.h"
 #include "GameFramework/Types/UpgradeCategory.h"
@@ -30,19 +32,33 @@ public:
 	UFUNCTION()
 	void HideSelectionMenu();
 
+	UFUNCTION()
+	void InitializeBindings();
+
 public:
 	UPROPERTY()
 	FOnOptionSelected OnOptionSelectedEvent;
 	
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* FirstOption;
+	UUpgradeSelectionCard* FirstOption;
 
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* SecondOption;
+	UUpgradeSelectionCard* SecondOption;
 
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* ThirdOption;
+	UUpgradeSelectionCard* ThirdOption;
 
 private:
-	void OnOptionSelectedRun(uint8 OptionIndex);
+	void OnOptionSelected(FUpgradeIndex Index, EUpgradeCategory Category);
+
+	UFUNCTION()
+	void OnFirstOptionSelected();
+
+	UFUNCTION()
+	void OnSecondOptionSelected();
+
+	UFUNCTION()
+	void OnThirdOptionSelected();
+private:
+	TArray<FUpgradeUIData> UIData;
 };

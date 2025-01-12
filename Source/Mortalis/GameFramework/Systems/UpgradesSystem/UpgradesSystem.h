@@ -68,14 +68,15 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count);
-
-	EUpgradeCategory GetRandomUpgradeCategory() const;
-
 	UFUNCTION()
 	void StartUpgradeProcedure(uint32 Level);
 
-	void FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory);
+	UFUNCTION()
+	void FinishUpgradeProcedure(FUpgradeIndex Index, EUpgradeCategory Category);
+
+	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count);
+
+	EUpgradeCategory GetRandomUpgradeCategory() const;
 
 	void RegisterHealthUpgradeChain();
 
