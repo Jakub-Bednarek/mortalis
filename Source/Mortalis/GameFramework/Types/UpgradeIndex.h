@@ -12,29 +12,39 @@ struct FUpgradeIndex
     FUpgradeIndex operator++(int)
     {
         auto temp = *this;
-        value += 1;
+        Value += 1;
         return temp;
     }
 
-    bool operator>(const FUpgradeIndex& Rhs)
+    bool operator>(const FUpgradeIndex& Rhs) const
     {
-        return value > Rhs.value;
+        return Value > Rhs.Value;
     }
 
-    bool operator<(const FUpgradeIndex& Rhs)
+    bool operator<(const FUpgradeIndex& Rhs) const
     {
-        return value < Rhs.value;
+        return Value < Rhs.Value;
     }
 
-    bool operator>=(const FUpgradeIndex& Rhs)
+    bool operator>=(const FUpgradeIndex& Rhs) const
     {
-        return not (value < Rhs.value);
+        return not (Value < Rhs.Value);
     }
 
-    bool operator<=(const FUpgradeIndex& Rhs)
+    bool operator<=(const FUpgradeIndex& Rhs) const
     {
-        return not (value > Rhs.value);
+        return not (Value > Rhs.Value);
     }
 
-    uint32 value;
+    bool operator==(const FUpgradeIndex& Rhs) const
+    {
+        return Value == Value;
+    }
+
+    uint32 Value;
 };
+
+FORCEINLINE uint32 GetTypeHash(const FUpgradeIndex& Value)
+{
+    return Value.Value;
+}

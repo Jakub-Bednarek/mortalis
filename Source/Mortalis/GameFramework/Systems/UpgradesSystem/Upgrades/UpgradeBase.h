@@ -26,7 +26,8 @@ struct UpgradeBase
 {
     friend class UpgradeBaseBuilder<U>;
 public:
-    using Builder = UpgradeBaseBuilder<U>;
+    using Builder   = UpgradeBaseBuilder<U>;
+    using IndexType = FUpgradeIndex;
 
     UpgradeBase() = default;
     virtual ~UpgradeBase() = default;
@@ -36,6 +37,11 @@ public:
     virtual FName CreateDescription() const
     {
         return Description;
+    }
+
+    IndexType GetIndex() const
+    {
+        return Index;
     }
 
     FUpgradeUIData GetUIData()
@@ -64,7 +70,7 @@ public:
     static T::Builder Create()
     {
         constexpr FUpgradeIndex SKILL_INDEX_LOWER_RANGE { 0 };
-        constexpr FUpgradeIndex SKILL_INDEX_UPPER_RANGE { 256 };
+        constexpr FUpgradeIndex SKILL_INDEX_UPPER_RANGE { 1024 };
         static IndexGenerator<FUpgradeIndex, SKILL_INDEX_LOWER_RANGE, SKILL_INDEX_UPPER_RANGE> Generator {};
 
         auto* UpgradeInstance = NewObject<T>();

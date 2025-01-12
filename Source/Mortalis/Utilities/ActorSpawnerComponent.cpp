@@ -5,9 +5,11 @@
 #include "CoreGlobals.h"
 #include "HAL/Platform.h"
 
+#include "Logging/LogMacros.h"
 #include "Logging/StructuredLog.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "NavigationSystem.h"
+#include "UObject/Object.h"
 
 // Sets default values for this component's properties
 UActorSpawnerComponent::UActorSpawnerComponent()
@@ -165,6 +167,13 @@ void UActorSpawnerComponent::SpawnWithStaticPosition()
 void UActorSpawnerComponent::SpawnActor(const int32 Index, const FVector& Location)
 {
 	auto SpawnedEnemy = GetWorld()->SpawnActor<AEnemyBase>(ActorsSpawnPool[Index].Get(), Location, FRotator(0.0f));
+	if (not IsValid(SpawnedEnemy))
+	{
+		// DEBUG purposes
+		UE_LOG(LogTemp, Error, TEXT("Spawned enemy is not valid"));
+		throw std::exception();
+	}
+	
 	SpawnedEnemy->OnDeathEvent.AddDynamic(ExperienceSystem, &AExperienceSystem::AddExperience);
 
 	SpawnedActors.Add(SpawnedEnemy);

@@ -22,7 +22,7 @@ void AUpgradesSystem::BeginPlay()
 
 	if (not ExperienceSystem)
 	{
-		UE_LOG(LogTemp, Error, TEXT("ExperienceSystem actor not set in UpgradesSystem"));
+		UE_LOG(LogTemp, Error, TEXT("ExperienceSystem actor is not set in UpgradesSystem"));
 	}
 	else
 	{
@@ -93,7 +93,6 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 	UE_LOG(LogTemp, Verbose, TEXT("Starting upgrade procedure for level %d."), Level);
 
 	auto GeneratedUpgradeChoicesData = GenerateUpgradeChoices(DefaultNumberOfUpgradesToGenerate);
-
 	if (OnUpgradeProcedureBegin.IsBound())
 	{
 		OnUpgradeProcedureBegin.Broadcast(GeneratedUpgradeChoicesData);
@@ -105,6 +104,7 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 void AUpgradesSystem::FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory)
 {
 	UE_LOG(LogTemp, Verbose, TEXT("Finishing upgrade procedure."));
+
 	if (OnUpgradeProcedureEnd.IsBound())
 	{
 		OnUpgradeProcedureEnd.Broadcast();

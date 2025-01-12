@@ -66,7 +66,10 @@ void UEnemyHealthComponent::TakeDamage(const float Damage)
 		}
 	}
 
-	HealthBarWidget->SetResourcePercentage(CurrentHealth, MaxHealth);
+	if (IsValid(HealthBarWidget))
+	{
+		HealthBarWidget->SetResourcePercentage(CurrentHealth, MaxHealth);
+	}
 }
 
 bool UEnemyHealthComponent::IsAlive() const
