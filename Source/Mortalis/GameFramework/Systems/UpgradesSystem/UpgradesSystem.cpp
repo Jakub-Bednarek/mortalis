@@ -3,8 +3,16 @@
 
 #include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
 #include "Components/SlateWrapperTypes.h"
+#include "CoreGlobals.h"
+#include "GameFramework/Types/PoolIndex.h"
 #include "GameFramework/Types/UpgradeCategory.h"
 #include "Internationalization/Internationalization.h"
+#include "Logging/LogMacros.h"
+#include "Logging/LogVerbosity.h"
+#include "Upgrades/NormalAttackComponentUpgrade.h"
+#include "Upgrades/SkillComponentUpgrade.h"
+#include "Upgrades/SpecialAttackComponentUpgrade.h"
+#include "Upgrades/StatisticsComponentUpgrade.h"
 #include "Upgrades/UpgradeUIData.h"
 
 #include "Upgrades/HealthUpgrade.h"
@@ -55,14 +63,13 @@ void AUpgradesSystem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count)
+TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count, const TArray<EUpgradeCategory>& ActiveUpgradePools)
 {
 	TArray<FUpgradeUIData> GeneratedUpgrades {};
 
-	// TODO: handle if a pool is exhausted or all pools are exhausted 
 	for (auto i = 0; i < DefaultNumberOfUpgradesToGenerate; i++)
 	{
-		auto CategoryToSelect = GetRandomUpgradeCategory();
+		auto CategoryToSelect = GetRandomUpgradeCategory(ActiveUpgradePools);
 
 		switch (CategoryToSelect)
 		{
@@ -87,18 +94,49 @@ TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count
 	return GeneratedUpgrades;
 }
 
-EUpgradeCategory AUpgradesSystem::GetRandomUpgradeCategory() const
+EUpgradeCategory AUpgradesSystem::GetRandomUpgradeCategory(const TArray<EUpgradeCategory>& ActiveUpgradesPools) const
 {
-	static int64 UpgradeCategoryLowerBound = 0;
+	static int32 UpgradeCategoryLowerBound = 0;
 
-	return static_cast<EUpgradeCategory>(FMath::RandRange(UpgradeCategoryLowerBound, UpgradeCategoryEntriesCount));
+	return ActiveUpgradesPools[FMath::RandRange(UpgradeCategoryLowerBound, ActiveUpgradesPools.Num() - 1)];
+}
+
+TArray<EUpgradeCategory> AUpgradesSystem::GetActiveUpgradePools() const
+{
+	TArray<EUpgradeCategory> ActivePools {};
+
+	if (not StatisticsUpgradesPool.IsExhausted())
+	{
+		ActivePools.Push(EUpgradeCategory::Statistics);
+	}
+	if (not NormalAttackUpgradesPool.IsExhausted())
+	{
+		ActivePools.Push(EUpgradeCategory::NormalAttack);
+	}
+	if (not SpecialAttackUpgradesPool.IsExhausted())
+	{
+		ActivePools.Push(EUpgradeCategory::SpecialAttack);
+	}
+	if (not SkillsUpgradesPool.IsExhausted())
+	{
+		ActivePools.Push(EUpgradeCategory::Skill);
+	}
+
+	return ActivePools;
 }
 
 void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 {
 	UE_LOG(LogTemp, Verbose, TEXT("Starting upgrade procedure for level %d."), Level);
+	
+	const auto ActiveUpgradesPools = GetActiveUpgradePools();
+	if (ActiveUpgradesPools.Num() == 0)
+	{
+		UE_LOG(LogTemp, Verbose, TEXT("All upgrades pools exhausted, not proceeding with upgrade sequence."));
+		return;
+	}
 
-	auto GeneratedUpgradeChoicesData = GenerateUpgradeChoices(DefaultNumberOfUpgradesToGenerate);
+	auto GeneratedUpgradeChoicesData = GenerateUpgradeChoices(DefaultNumberOfUpgradesToGenerate, ActiveUpgradesPools);
 	if (OnUpgradeProcedureBegin.IsBound())
 	{
 		OnUpgradeProcedureBegin.Broadcast(GeneratedUpgradeChoicesData);

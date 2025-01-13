@@ -2,42 +2,41 @@
 
 #include "CoreMinimal.h"
 
-#include "ChainIndex.generated.h"
+#include "PoolIndex.generated.h"
 
 USTRUCT()
-struct FChainIndex
+struct FPoolIndex
 {
     GENERATED_BODY()
 
-    FChainIndex operator++(int)
+    FPoolIndex operator++(int)
     {
         auto temp = *this;
         Value += 1;
         return temp;
     }
 
-
-    bool operator>(const FChainIndex& Rhs) const
+    bool operator>(const FPoolIndex& Rhs) const
     {
         return Value > Rhs.Value;
     }
 
-    bool operator<(const FChainIndex& Rhs) const
+    bool operator<(const FPoolIndex& Rhs) const
     {
         return Value < Rhs.Value;
     }
 
-    bool operator>=(const FChainIndex& Rhs) const
+    bool operator>=(const FPoolIndex& Rhs) const
     {
         return not (Value < Rhs.Value);
     }
 
-    bool operator<=(const FChainIndex& Rhs) const
+    bool operator<=(const FPoolIndex& Rhs) const
     {
         return not (Value > Rhs.Value);
     }
 
-    bool operator==(const FChainIndex& Rhs) const
+    bool operator==(const FPoolIndex& Rhs) const
     {
         return Value == Value;
     }
@@ -45,7 +44,7 @@ struct FChainIndex
     uint32 Value;
 };
 
-FORCEINLINE uint32 GetTypeHash(const FChainIndex& Value)
+FORCEINLINE uint32 GetTypeHash(const FPoolIndex& Value)
 {
     return Value.Value;
 }

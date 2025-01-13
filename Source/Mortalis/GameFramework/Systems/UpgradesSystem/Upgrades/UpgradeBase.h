@@ -111,7 +111,7 @@ public:
 
     UpgradeBaseBuilder& WithDescription(FName Description) { Target->SetDescription(MoveTemp(Description)); return *this; }
 
-    UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->SetCategory(Category); return *this; }
+    // UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->SetCategory(Category); return *this; }
 
     T* Build() { return Target; }
 

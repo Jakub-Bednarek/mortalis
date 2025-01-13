@@ -2,11 +2,15 @@
 
 #pragma once
 
+#include "GameFramework/Types/PoolIndex.h"
+#include "GameFramework/Types/UpgradeIndex.h"
+#include "GameFramework/Helpers/IndexGenerator.h"
+
 #include "Upgrades/UpgradesChain.h"
 #include "Upgrades/UpgradeUIData.h"
-#include "GameFramework/Types/UpgradeIndex.h"
 
 #include "CoreMinimal.h"
+#include <cstddef>
 
 /**
  * 
@@ -14,16 +18,39 @@
 
 // this is wrong, pools should contain all the data and proxies should manage indexes returned by the pool
 // this way it will be easier and cheaper to add/remove/mark as X specific skills/chains
+
+template <typename T>
+class UpgradesPoolFactory;
+
 template <typename T>
 class MORTALIS_API UpgradesPool
 {
+	friend class UpgradesPoolFactory<T>;
+
 public:
-	UpgradesPool(): bIsExhausted(false) {}
+	UpgradesPool(): Index(PoolIndexGenerator.Next()), bIsExhausted(true) {}
 	~UpgradesPool() {}
+
+	void RegisterChain(FChainIndex ChainIndex, Chain<T>&& Value)
+	{
+		if (not Value.IsExhausted())
+		{
+			bIsExhausted = false;
+		}
+
+		AddMappingForAllChainUpgrades(Value.GetAllUpgradesIndexes(), ChainIndex);
+		ActiveChains.Add(Value.GetIndex());
+		RegisteredChains.Emplace(Value.GetIndex(), MoveTemp(Value));
+	}
 
 	bool IsExhausted() const
 	{
 		return bIsExhausted;
+	}
+
+	FPoolIndex GetIndex() const
+	{
+		return Index;
 	}
 
 	FUpgradeUIData GetUIDataFromRandomlySelected()
@@ -50,13 +77,6 @@ public:
 	Chain<T> CreateChain()
 	{
 		return Chain<T> { FChainIndex { 0 } };
-	}
-
-	void RegisterChain(FChainIndex ChainIndex, Chain<T>&& Value)
-	{
-		AddMappingForAllChainUpgrades(Value.GetAllUpgradesIndexes(), ChainIndex);
-		ActiveChains.Add(Value.GetIndex());
-		RegisteredChains.Emplace(Value.GetIndex(), MoveTemp(Value));
 	}
 
 	T SelecteNextUpgrade(const FUpgradeIndex UpgradeIndex)
@@ -102,10 +122,15 @@ private:
 	}
 
 private:
+	static constexpr FPoolIndex MIN_POOL_INDEX { 0 };
+	static constexpr FPoolIndex MAX_POOL_INDEX { 128 };
+	inline static IndexGenerator<FPoolIndex, MIN_POOL_INDEX, MAX_POOL_INDEX> PoolIndexGenerator {};
+
 	// BLEH, need to find a better way, that's gonna hurt cache imo and looks ugly af
 	TMap<FUpgradeIndex, FChainIndex> UpgradeToChainMapping {};
 	TMap<FChainIndex, Chain<T>> 	 RegisteredChains {};
 	TArray<FChainIndex> 			 ActiveChains {};
 	TSet<FChainIndex> 				 ExhaustedChains {};
+	FPoolIndex						 Index {};
 	bool							 bIsExhausted;
 };

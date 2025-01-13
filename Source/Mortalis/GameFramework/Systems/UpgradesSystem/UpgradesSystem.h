@@ -74,9 +74,11 @@ private:
 	UFUNCTION()
 	void FinishUpgradeProcedure(FUpgradeIndex Index, EUpgradeCategory Category);
 
-	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count);
+	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count, const TArray<EUpgradeCategory>& ActiveUpgradePools);
 
-	EUpgradeCategory GetRandomUpgradeCategory() const;
+	TArray<EUpgradeCategory> GetActiveUpgradePools() const;
+
+	EUpgradeCategory GetRandomUpgradeCategory(const TArray<EUpgradeCategory>& ActiveUpgradesPools) const;
 
 	void RegisterTestUpgrades();
 
