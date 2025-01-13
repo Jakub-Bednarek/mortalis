@@ -78,7 +78,9 @@ private:
 
 	EUpgradeCategory GetRandomUpgradeCategory() const;
 
-	void RegisterHealthUpgradeChain();
+	void RegisterTestUpgrades();
+
+	void MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category);
 
 private:
 	static constexpr uint8 DefaultNumberOfUpgradesToGenerate = 3;
@@ -87,8 +89,8 @@ private:
 
 	UUpgradeSelectionWidget* UpgradeSelectionWidget;
 
-	UpgradesPool<UStatisticsComponentUpgrade> StatisticsUpgradesPool;
-	UpgradesPool<UNormalAttackComponentUpgrade> NormalAttackUpgradesPool;
-	UpgradesPool<USpecialAttackComponentUpgrade> SpecialAttackUpgradesPool;
-	UpgradesPool<USkillComponentUpgrade> SkillsUpgradesPool;
+	UpgradesPool<UStatisticsComponentUpgrade*> StatisticsUpgradesPool;
+	UpgradesPool<UNormalAttackComponentUpgrade*> NormalAttackUpgradesPool;
+	UpgradesPool<USpecialAttackComponentUpgrade*> SpecialAttackUpgradesPool;
+	UpgradesPool<USkillComponentUpgrade*> SkillsUpgradesPool;
 };

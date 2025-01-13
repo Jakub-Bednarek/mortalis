@@ -20,7 +20,6 @@ class USpecialAttackComponentUpgrade : public UObject, public UpgradeBase<USpeci
 
 public:
     using BaseType = UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>;
-    using Builder  = BaseType::Builder;
 
     USpecialAttackComponentUpgrade() = default;
     virtual ~USpecialAttackComponentUpgrade() = default;

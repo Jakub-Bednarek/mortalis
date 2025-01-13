@@ -24,9 +24,7 @@ enum class UpgradeState : uint8
 template <typename T, typename U>
 struct UpgradeBase
 {
-    friend class UpgradeBaseBuilder<U>;
 public:
-    using Builder   = UpgradeBaseBuilder<U>;
     using IndexType = FUpgradeIndex;
 
     UpgradeBase() = default;
@@ -44,7 +42,7 @@ public:
         return Index;
     }
 
-    FUpgradeUIData GetUIData()
+    FUpgradeUIData GetUIData() const
     {
         return {
             Name,
@@ -54,7 +52,27 @@ public:
         };
     }
 
-protected:
+    void SetName(FName&& Value)
+    {
+        Name = MoveTemp(Value);
+    }
+
+    void SetDescription(FName&& Value)
+    {
+        Description = Value;
+    }
+
+    // TODO: find a way to remove SetIndex and allow builder to set it, problematic part is allowing friend access from childs child pov
+    // Or make it one time assignment only and print error otherwise -> you fucking moron pass it in the constructor
+    void SetIndex(const FUpgradeIndex Value)
+    {
+        Index = Value;
+    }
+
+    void SetCategory(const EUpgradeCategory Value)
+    {
+        Category = Value;
+    }
 
 private:
     FName            Name;
@@ -86,16 +104,17 @@ public:
         : Target(Target)
     {
         assert(Target);
-        Target->Index = MoveTemp(Index);
+        Target->SetIndex(MoveTemp(Index));
     }
 
-    UpgradeBaseBuilder& WithName(FName Name) { Target->Name = MoveTemp(Name); return *this; }
+    UpgradeBaseBuilder& WithName(FName Name) { Target->SetName(MoveTemp(Name)); return *this; }
 
-    UpgradeBaseBuilder& WithDescription(FName Description) { Target->Description = MoveTemp(Description); return *this; }
+    UpgradeBaseBuilder& WithDescription(FName Description) { Target->SetDescription(MoveTemp(Description)); return *this; }
 
-    UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->Category = Category; return *this; }
+    UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->SetCategory(Category); return *this; }
 
     T* Build() { return Target; }
-private:
+
+protected:
     T* Target;
 };

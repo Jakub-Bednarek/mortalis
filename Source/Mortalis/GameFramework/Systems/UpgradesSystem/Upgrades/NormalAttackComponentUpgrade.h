@@ -20,7 +20,6 @@ class UNormalAttackComponentUpgrade : public UObject, public UpgradeBase<UNormal
 
 public:
     using BaseType = UpgradeBase<UNormalAttackComponent, UNormalAttackComponentUpgrade>;
-    using Builder = BaseType::Builder;
 
     UNormalAttackComponentUpgrade() = default;
     virtual ~UNormalAttackComponentUpgrade() = default;

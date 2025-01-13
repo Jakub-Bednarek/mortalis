@@ -47,6 +47,11 @@ public:
 		return SelectedChain->GetNextCandidate()->GetUIData();
 	}
 
+	Chain<T> CreateChain()
+	{
+		return Chain<T> { FChainIndex { 0 } };
+	}
+
 	void RegisterChain(FChainIndex ChainIndex, Chain<T>&& Value)
 	{
 		AddMappingForAllChainUpgrades(Value.GetAllUpgradesIndexes(), ChainIndex);
@@ -54,33 +59,37 @@ public:
 		RegisteredChains.Emplace(Value.GetIndex(), MoveTemp(Value));
 	}
 
-	void MarkUpgradeInChainAsSelected(FUpgradeIndex UpgradeIndex)
+	T SelecteNextUpgrade(const FUpgradeIndex UpgradeIndex)
 	{
 		const auto* ChainIndex = UpgradeToChainMapping.Find(UpgradeIndex);
 		if (ChainIndex == nullptr)
 		{
 			UE_LOG(LogTemp, Error, TEXT("Lookup failed, no ChainIndex associated with given UpgradeIndex: %d."), UpgradeIndex.Value);
-			return;
+			return nullptr;
 		}
 
-		auto* ChainInstance = RegisteredChains.Find(ChainIndex);
+		auto ChainInstance = RegisteredChains.Find(*ChainIndex);
 		if (ChainInstance == nullptr)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Lookup failed, no Chain associated with given ChainIndex: %d."), ChainIndex.Value);
-			return;
+			UE_LOG(LogTemp, Error, TEXT("Lookup failed, no Chain associated with given ChainIndex: %d."), ChainIndex->Value);
+			return nullptr;
 		}
+
+		T UpgradeApplier = ChainInstance->GetNextCandidate();
 
 		ChainInstance->MarkNextUpgradeAsSelected();
 		if (ChainInstance->IsExhausted())
 		{
-			ActiveChains.Remove(ChainIndex);
-			ExhaustedChains.Add(ChainIndex);
+			ActiveChains.Remove(*ChainIndex);
+			ExhaustedChains.Add(*ChainIndex);
 
 			if (ActiveChains.Num() == 0)
 			{
 				bIsExhausted = true;
 			}
 		}
+
+		return UpgradeApplier;
 	}
 
 private:

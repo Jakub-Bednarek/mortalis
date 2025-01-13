@@ -4,8 +4,13 @@
 #include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
 #include "Components/SlateWrapperTypes.h"
 #include "GameFramework/Types/UpgradeCategory.h"
-#include "Upgrades/HealthUpgrade.h"
+#include "Internationalization/Internationalization.h"
 #include "Upgrades/UpgradeUIData.h"
+
+#include "Upgrades/HealthUpgrade.h"
+#include "Upgrades/FireballSkillUpgrade.h"
+#include "Upgrades/NormalAttackDamageUpgrade.h"
+#include "Upgrades/SpecialAttackDamageUpgrade.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
@@ -18,7 +23,7 @@ void AUpgradesSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	RegisterHealthUpgradeChain();
+	RegisterTestUpgrades();
 
 	if (not ExperienceSystem)
 	{
@@ -54,6 +59,7 @@ TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count
 {
 	TArray<FUpgradeUIData> GeneratedUpgrades {};
 
+	// TODO: handle if a pool is exhausted or all pools are exhausted 
 	for (auto i = 0; i < DefaultNumberOfUpgradesToGenerate; i++)
 	{
 		auto CategoryToSelect = GetRandomUpgradeCategory();
@@ -101,19 +107,74 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 	UpgradeSelectionWidget->ShowSelectionMenu(GeneratedUpgradeChoicesData);
 }
 
-void AUpgradesSystem::FinishUpgradeProcedure(FUpgradeIndex, EUpgradeCategory)
+void AUpgradesSystem::FinishUpgradeProcedure(const FUpgradeIndex Index, const EUpgradeCategory Category)
 {
 	UE_LOG(LogTemp, Verbose, TEXT("Finishing upgrade procedure."));
+
+	MarkAndPropagateSelectedUpgrade(Index, Category);
+	UpgradeSelectionWidget->HideSelectionMenu();
 
 	if (OnUpgradeProcedureEnd.IsBound())
 	{
 		OnUpgradeProcedureEnd.Broadcast();
 	}
-
-	UpgradeSelectionWidget->HideSelectionMenu();
 }
 
-void AUpgradesSystem::RegisterHealthUpgradeChain()
+void AUpgradesSystem::MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category)
 {
-	auto Upgrade = UpgradeFactory::Create<UHealthUpgrade>();
+	switch (Category)
+	{
+		case EUpgradeCategory::Statistics:
+		{
+			auto* UpgradeInstance = StatisticsUpgradesPool.SelecteNextUpgrade(Index);
+			if (UpgradeInstance != nullptr and OnStatisticsComponentUpgradeSelected.IsBound())
+			{
+				OnStatisticsComponentUpgradeSelected.Broadcast(UpgradeInstance);
+			}
+			break;
+		}
+		case EUpgradeCategory::NormalAttack:
+		{
+			auto* UpgradeInstance = NormalAttackUpgradesPool.SelecteNextUpgrade(Index);
+			if (UpgradeInstance != nullptr and OnNormalAtatckComponentUpgradeSelected.IsBound())
+			{
+				OnNormalAtatckComponentUpgradeSelected.Broadcast(UpgradeInstance);
+			}
+			break;
+		}
+		case EUpgradeCategory::SpecialAttack:
+		{
+			auto* UpgradeInstance = SpecialAttackUpgradesPool.SelecteNextUpgrade(Index);
+			if (UpgradeInstance != nullptr and OnSpecialAttackComponentUpgradeSelected.IsBound())
+			{
+				OnSpecialAttackComponentUpgradeSelected.Broadcast(UpgradeInstance);
+			}
+			break;
+		}
+		case EUpgradeCategory::Skill:
+		{
+			auto* UpgradeInstance = SkillsUpgradesPool.SelecteNextUpgrade(Index);
+			if (UpgradeInstance != nullptr and OnSkillUpgradeSelected.IsBound())
+			{
+				OnSkillUpgradeSelected.Broadcast(UpgradeInstance);
+			}
+			break;
+		}
+		default:
+			UE_LOG(LogTemp, Error, TEXT("Can't propagate selected upgrade, category is currently not handled: %d"), static_cast<uint8>(Category));
+			break;
+	}
+}
+
+void AUpgradesSystem::RegisterTestUpgrades()
+{
+	auto HealthUpgradeChain = StatisticsUpgradesPool.CreateChain();
+	auto* HealthUpgrade1 = 
+		UpgradeFactory::Create<UHealthUpgrade>()
+		.WithName(FName(TEXT("Health Upgrade 1")))
+		.WithDescription(FName(TEXT("Test description")))
+		.Build();
+
+	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade1);
+	StatisticsUpgradesPool.RegisterChain({0}, MoveTemp(HealthUpgradeChain));
 }

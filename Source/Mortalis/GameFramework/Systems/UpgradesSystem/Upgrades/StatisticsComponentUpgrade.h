@@ -20,7 +20,6 @@ class UStatisticsComponentUpgrade : public UObject, public UpgradeBase<UPlayerSt
 
 public:
     using BaseType = UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>;
-    using Builder  = BaseType::Builder;
 
     UStatisticsComponentUpgrade() = default;
     virtual ~UStatisticsComponentUpgrade() = default;

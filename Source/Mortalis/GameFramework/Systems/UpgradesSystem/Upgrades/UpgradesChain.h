@@ -4,6 +4,7 @@
 
 #include "GameFramework/Types/UpgradeCategory.h"
 #include "GameFramework/Types/ChainIndex.h"
+#include "GameFramework/Types/UpgradeIndex.h"
 
 #include "CoreMinimal.h"
 
@@ -13,10 +14,9 @@
 template <typename T>
 struct Chain
 {
-    Chain(FChainIndex Index) : Index(Index), bIsExhausted(false), NextUpgradeIndex(StartingUpgradeIndex) {}
+    Chain(FChainIndex Index) : Index(Index), NextUpgradeIndex(StartingUpgradeIndex), bIsExhausted(false)  {}
 
-    template <typename T>
-    void RegisterUpgrade(T* Upgrade) 
+    void RegisterUpgrade(T Upgrade) 
     {
         Upgrades.Push(Upgrade);
     };
@@ -26,6 +26,10 @@ struct Chain
         check(NextUpgradeIndex < Upgrades.Num());
 
         ++NextUpgradeIndex;
+        if (NextUpgradeIndex == Upgrades.Num())
+        {
+            bIsExhausted = true;
+        }
     }
 
     bool IsExhausted() const
@@ -33,7 +37,7 @@ struct Chain
         return bIsExhausted;
     }
 
-    T* GetNextCandidate()
+    T GetNextCandidate()
     {
         check(Upgrades.Num() > 0);
         check(NextUpgradeIndex != Upgrades.Num());
@@ -42,9 +46,9 @@ struct Chain
         return Upgrades[NextUpgradeIndex];
     }
 
-    TArray<typename T::IndexType> GetAllUpgradesIndexes() const
+    TArray<FUpgradeIndex> GetAllUpgradesIndexes() const
     {
-        TArray<typename T::IndexType> Indexes {};
+        TArray<FUpgradeIndex> Indexes {};
         for (const auto& Upgrade : Upgrades)
         {
             Indexes.Push(Upgrade->GetIndex());
@@ -59,11 +63,11 @@ struct Chain
     }
 
 private:
-    // TODO: check if stability of elements guaranteed?
     static constexpr TArray<T*>::SizeType StartingUpgradeIndex { 0 };
  
-    TArray<T*>           Upgrades {};
-    TArray<T*>::SizeType NextUpgradeIndex;
+    // TODO: check if stability of elements guaranteed?
     FChainIndex          Index;
+    TArray<T>            Upgrades {};
+    TArray<T>::SizeType  NextUpgradeIndex;
     bool                 bIsExhausted;
 };
