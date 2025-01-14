@@ -22,6 +22,7 @@ void UPlayerStatisticsComponent::BeginPlay()
 
 	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
 	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
+	PlayerStatisticsHUD->InitializeBindings();
 }
 
 void UPlayerStatisticsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

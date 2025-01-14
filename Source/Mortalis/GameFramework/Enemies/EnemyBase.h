@@ -8,7 +8,7 @@
 #include "GameFramework/Actor.h"
 #include "EnemyBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, int32, Experience);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, float, Experience);
 
 UCLASS()
 class MORTALIS_API AEnemyBase : public AActor
@@ -25,7 +25,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Experience;
+	float Experience;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnDeath OnDeathEvent;
@@ -33,5 +33,5 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	int32 GetExperience() const;
+	float GetExperience() const;
 };

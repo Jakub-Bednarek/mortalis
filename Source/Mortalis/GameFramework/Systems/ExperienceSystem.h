@@ -8,6 +8,7 @@
 #include "ExperienceSystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLevelUp, uint32, Level);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnExperienceGained, float, CurrentExperience, float, MaxExperience);
 
 UCLASS(BlueprintType)
 class MORTALIS_API AExperienceSystem : public AActor
@@ -20,14 +21,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddExperience(int32 Experience);
-
-protected:
-	virtual void BeginPlay() override;
+	void AddExperience(float Experience);
 
 public:	
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnCharacterLevelUp OnCharacterLevelUp;
+
+	UPROPERTY()
+	FOnExperienceGained OnExperienceGainedEvent;
+
+protected:
+	virtual void BeginPlay() override;
 
 private:
 	bool CanLevelUp() const;
@@ -38,6 +42,6 @@ private:
 	// this part could make use of some strategy pattern
 	int32 CurrentLevel = 0;
 
-	int32 CurrentExperience = 0;
-	int32 ExperienceForNextLevel = 100;
+	float CurrentExperience = 0;
+	float ExperienceForNextLevel = 100;
 };

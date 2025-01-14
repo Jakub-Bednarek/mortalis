@@ -15,8 +15,12 @@ class MORTALIS_API UPlayerStatisticsHUD : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	void InitializeBindings();
+
 	void SetHealth(float CurrentHealth, float MaxHealth);
 	void SetMana(float CurrentMana, float MaxMana);
+
+	UFUNCTION()
 	void SetExperience(float CurrentExperience, float MaxExperience);
 	
 public:

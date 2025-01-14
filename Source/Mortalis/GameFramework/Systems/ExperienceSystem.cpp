@@ -23,7 +23,7 @@ void AExperienceSystem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AExperienceSystem::AddExperience(const int32 Experience)
+void AExperienceSystem::AddExperience(const float Experience)
 {
 	if (Experience < 0.0f)
 	{
@@ -35,6 +35,11 @@ void AExperienceSystem::AddExperience(const int32 Experience)
 	if(CanLevelUp())
 	{
 		LevelUp();
+	}
+
+	if (OnExperienceGainedEvent.IsBound())
+	{
+		OnExperienceGainedEvent.Broadcast(CurrentExperience, ExperienceForNextLevel);
 	}
 }
 

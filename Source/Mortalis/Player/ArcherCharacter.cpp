@@ -22,6 +22,7 @@ AArcherCharacter::AArcherCharacter()
 	PlayerStatisticsComponent = CreateDefaultSubobject<UPlayerStatisticsComponent>(TEXT("Statistics Component"));
 	NormalAttackComponent = CreateDefaultSubobject<UNormalAttackComponent>(TEXT("Normal attack Component"));
 	SpecialAttackComponent = CreateDefaultSubobject<USpecialAttackComponent>(TEXT("Special attack Component"));
+	// SkillAttackComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill Component"));
 }
 
 // Called when the game starts or when spawned

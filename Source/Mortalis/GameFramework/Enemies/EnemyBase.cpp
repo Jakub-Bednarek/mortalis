@@ -34,7 +34,7 @@ void AEnemyBase::ProcessDeath()
 	}
 }
 
-int32 AEnemyBase::GetExperience() const
+float AEnemyBase::GetExperience() const
 {
 	return Experience;
 }
