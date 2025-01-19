@@ -8,6 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnLevelFinished);
 DECLARE_MULTICAST_DELEGATE(FOnLevelRestart);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerDeath);
 
 UENUM()
 enum class EMortalisGameState : uint8
@@ -16,6 +17,7 @@ enum class EMortalisGameState : uint8
 	LevelLoading UMETA(DisplayName="LevelLoading"),
 	Playing UMETA(DisplayName="Playing"),
 	Paused UMETA(DisplayName="Paused"),
+	PlayerDead UMETA(DisplayName="PlayerDead"),
 	LevelFinished UMETA(DisplayName="LevelFinished"),
 	Restarting UMETA(DisplayName="Restarting")
 };
@@ -33,6 +35,7 @@ public:
 public:
 	FOnLevelFinished OnLevelFinishedEvent;
 	FOnLevelRestart OnLevelRestartEvent;
+	FOnPlayerDeath OnPlayerDeathEvent;
 
 protected:
 	virtual void BeginPlay() override;

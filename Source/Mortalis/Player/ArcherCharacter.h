@@ -38,6 +38,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, category="Player/Statistics")
 	void AddExperience(float Value);
+
+	UFUNCTION(BlueprintCallable, category="Player")
+	void HandlePlayerDeath();
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
@@ -79,6 +82,8 @@ private:
 	int32 CurrentLevel = 1;
 	float ExperienceForNextLevel = 100.0f;
 	float CurrentExperience = 0.0f;
+
+	bool bIsDead = false;
 
 	FVector ViewportCenter;
 };

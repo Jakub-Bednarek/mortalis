@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
+#include "GameManager.h"
 #include "Logging/LogMacros.h"
 #include "Projectiles/BasicProjectile.h"
 
@@ -35,6 +36,11 @@ void AArcherCharacter::BeginPlay()
 void AArcherCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsDead)
+	{
+		return;
+	}
 
 	ProcessFrameMovement(DeltaTime);
 }
@@ -109,3 +115,8 @@ void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AArcherCharacter::HandlePlayerDeath()
+{
+	bIsDead = true;
+	GameStateManager::Get().AddStateChange(EMortalisGameState::PlayerDead);
+}

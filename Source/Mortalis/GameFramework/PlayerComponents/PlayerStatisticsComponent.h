@@ -9,6 +9,8 @@
 
 #include "PlayerStatisticsComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOutOfHealthEvent);
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MORTALIS_API UPlayerStatisticsComponent : public UActorComponent
@@ -47,12 +49,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetBaseNormalAttackDamage() const;
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FOutOfHealthEvent OutOfHealthEvent;
+
+protected:
+	virtual void BeginPlay() override;
 
 private:
 	void ApplyRegenerations(float DeltaTime);

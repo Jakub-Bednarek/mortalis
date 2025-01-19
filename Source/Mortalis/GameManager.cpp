@@ -52,6 +52,14 @@ void AGameManager::PropagateStateChangedEvent(const EMortalisGameState NewState)
 			}
 			break;
 		}
+		case EMortalisGameState::PlayerDead:
+		{
+			if (OnPlayerDeathEvent.IsBound())
+			{
+				OnPlayerDeathEvent.Broadcast();
+			}
+			break;
+		}
 		default:
 			break;
 	}

@@ -54,6 +54,14 @@ void UPlayerStatisticsComponent::TakeDamage(const float Damage)
 
 	CurrentHealth -= Damage;
 	PlayerStatisticsHUD->SetHealth(CurrentHealth, MaxHealth);
+
+	if (CurrentHealth <= 0.0)
+	{
+		if (OutOfHealthEvent.IsBound())
+		{
+			OutOfHealthEvent.Broadcast();
+		}
+	}
 }
 
 void UPlayerStatisticsComponent::ChangeCurrentMana(const float Delta)
