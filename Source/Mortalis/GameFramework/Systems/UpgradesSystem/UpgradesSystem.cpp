@@ -143,6 +143,8 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 	}
 
 	UpgradeSelectionWidget->ShowSelectionMenu(GeneratedUpgradeChoicesData);
+
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
 void AUpgradesSystem::FinishUpgradeProcedure(const FUpgradeIndex Index, const EUpgradeCategory Category)
@@ -156,6 +158,8 @@ void AUpgradesSystem::FinishUpgradeProcedure(const FUpgradeIndex Index, const EU
 	{
 		OnUpgradeProcedureEnd.Broadcast();
 	}
+
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
 }
 
 void AUpgradesSystem::MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category)
