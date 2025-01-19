@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "UI/Menus/GameFinishedMenu.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameManager.generated.h"
@@ -33,6 +35,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UGameFinishedMenu> GameFinishedMenuClass;
+
 	FOnLevelFinished OnLevelFinishedEvent;
 	FOnLevelRestart OnLevelRestartEvent;
 	FOnPlayerDeath OnPlayerDeathEvent;
@@ -42,6 +47,17 @@ protected:
 
 private:
 	void PropagateStateChangedEvent(const EMortalisGameState NewState);
+	void ShowLevelFinishedMenu();
+	void HideLevelFinishedMenu();
+
+	UFUNCTION()
+	void RestartGame();
+
+	UFUNCTION()
+	void ExitToMainMenu();
+
+private:
+	TObjectPtr<UGameFinishedMenu> GameFinishedMenu;
 };
 
 class GameStateManager
@@ -65,6 +81,7 @@ public:
 			*UEnum::GetValueAsString(TargetState)
 		);
 
+		CurrentState = TargetState;
 		bStateChanged = true;
 	}
 

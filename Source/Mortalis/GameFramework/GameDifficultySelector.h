@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-#include "UI/MainMenu/DifficultySelectionWidget.h"
+#include "UI/Menus/DifficultySelectionWidget.h"
 
 #include "GameDifficultySelector.generated.h"
 

@@ -3,6 +3,7 @@
 
 #include "ActorSpawnerComponent.h"
 #include "CoreGlobals.h"
+#include "Engine/World.h"
 #include "HAL/Platform.h"
 
 #include "Logging/LogMacros.h"
@@ -17,8 +18,6 @@ UActorSpawnerComponent::UActorSpawnerComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -166,12 +165,13 @@ void UActorSpawnerComponent::SpawnWithStaticPosition()
 
 void UActorSpawnerComponent::SpawnActor(const int32 Index, const FVector& Location)
 {
+	// TODO spawn may fail -> suspecting collision with other actors
 	auto SpawnedEnemy = GetWorld()->SpawnActor<AEnemyBase>(ActorsSpawnPool[Index].Get(), Location, FRotator(0.0f));
 	if (not IsValid(SpawnedEnemy))
 	{
 		// DEBUG purposes
 		UE_LOG(LogTemp, Error, TEXT("Spawned enemy is not valid"));
-		throw std::exception();
+		// throw std::exception();
 	}
 	
 	SpawnedEnemy->OnDeathEvent.AddDynamic(ExperienceSystem, &AExperienceSystem::AddExperience);

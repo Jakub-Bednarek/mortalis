@@ -118,5 +118,6 @@ void AArcherCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void AArcherCharacter::HandlePlayerDeath()
 {
 	bIsDead = true;
+	SetActorEnableCollision(false);
 	GameStateManager::Get().AddStateChange(EMortalisGameState::PlayerDead);
 }
