@@ -69,6 +69,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	UFUNCTION()
+	void OnRestart();
+
 	void ProcessFrameMovement(float DeltaTime);
 
 	void UpdateExperienceHUD();

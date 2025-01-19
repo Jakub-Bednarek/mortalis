@@ -30,6 +30,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UFUNCTION()
+	void OnRestart();
+
 	void UpdateAttackCooldown(float DeltaTime);
 
 	void ExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics);
@@ -38,6 +41,4 @@ private:
 	FVector CalculateAttackDirection() const;
 private:
 	float NextAttackCooldown = 0.0f;
-
-	FVector ViewportCenter;
 };

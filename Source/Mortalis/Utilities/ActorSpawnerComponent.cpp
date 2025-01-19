@@ -2,6 +2,7 @@
 
 
 #include "ActorSpawnerComponent.h"
+#include "GameManager.h"
 #include "CoreGlobals.h"
 #include "Engine/World.h"
 #include "HAL/Platform.h"
@@ -11,6 +12,7 @@
 #include "NavMesh/RecastNavMesh.h"
 #include "NavigationSystem.h"
 #include "UObject/Object.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UActorSpawnerComponent::UActorSpawnerComponent()
@@ -27,6 +29,19 @@ void UActorSpawnerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	RootLocation = GetOwner()->GetRootComponent()->GetComponentLocation();
+
+	TArray<AActor*> GameManagerActors {};
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameManager::StaticClass(), GameManagerActors);
+
+	if (GameManagerActors.Num() != 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Expected exactly one GameManager actor, found: %d"), GameManagerActors.Num());
+	}
+	else
+	{
+		auto* GameManager = (AGameManager*)(GameManagerActors[0]);
+		GameManager->OnLevelRestartEvent.AddUObject(this, &UActorSpawnerComponent::OnRestart);
+	}
 }
 
 
@@ -215,4 +230,9 @@ int32 UActorSpawnerComponent::GetNumberOfWavesLeft() const
 float UActorSpawnerComponent::GetTimeToNextSpawn() const
 {
 	return SpawnIntervalInSeconds - TimeSinceLastSpawn;
+}
+
+void UActorSpawnerComponent::OnRestart()
+{
+	UE_LOG(LogTemp, Log, TEXT("[ActorSpawnerComponent] Restarting..."));
 }

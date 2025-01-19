@@ -72,6 +72,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	UFUNCTION()
+	void OnRestart();
+
 	void SpawnWithNavMeshSelectionEnabled();
 	void SpawnWithStaticPosition();
 	void SpawnActor(int32 Index, const FVector& Location);

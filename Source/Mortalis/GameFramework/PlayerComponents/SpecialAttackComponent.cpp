@@ -2,6 +2,7 @@
 
 
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
+#include "GameManager.h"
 
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -14,8 +15,19 @@ USpecialAttackComponent::USpecialAttackComponent()
 void USpecialAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
+
+	TArray<AActor*> GameManagerActors {};
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameManager::StaticClass(), GameManagerActors);
+
+	if (GameManagerActors.Num() != 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Expected exactly one GameManager actor, found: %d"), GameManagerActors.Num());
+	}
+	else
+	{
+		auto* GameManager = (AGameManager*)(GameManagerActors[0]);
+		GameManager->OnLevelRestartEvent.AddUObject(this, &USpecialAttackComponent::OnRestart);
+	}
 }
 
 void USpecialAttackComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -71,4 +83,9 @@ FVector USpecialAttackComponent::CalculateAttackDirection() const
 	}
 
 	return {};
+}
+
+void USpecialAttackComponent::OnRestart()
+{
+	UE_LOG(LogTemp, Log, TEXT("[SpecialAttackComponent] Restarting..."));
 }

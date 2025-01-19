@@ -3,6 +3,7 @@
 
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "Projectiles/BasicProjectile.h"
+#include "GameManager.h"
 
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -17,9 +18,18 @@ void UNormalAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// TODO: Extract to base class (and fetch value in separate system?)
-	const auto ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-	ViewportCenter = FVector(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f, 0.0f);
+	TArray<AActor*> GameManagerActors {};
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameManager::StaticClass(), GameManagerActors);
+
+	if (GameManagerActors.Num() != 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Expected exactly one GameManager actor, found: %d"), GameManagerActors.Num());
+	}
+	else
+	{
+		auto* GameManager = (AGameManager*)(GameManagerActors[0]);
+		GameManager->OnLevelRestartEvent.AddUObject(this, &UNormalAttackComponent::OnRestart);
+	}
 }
 
 // TODO: set tick periodicity to every 5 frames
@@ -79,6 +89,11 @@ FVector UNormalAttackComponent::CalculateAttackDirection() const
 	// Most likely inefficient
 	auto* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	bHitSuccessful = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+
+	if (not PlayerController)
+	{
+		return {};
+	}
 	
 	APawn* ControlledPawn = PlayerController->GetPawn();
 	if (ControlledPawn != nullptr)
@@ -88,4 +103,9 @@ FVector UNormalAttackComponent::CalculateAttackDirection() const
 	}
 
 	return {};
+}
+
+void UNormalAttackComponent::OnRestart()
+{
+	UE_LOG(LogTemp, Log, TEXT("[NormalAttackComponent] Restarting..."));
 }

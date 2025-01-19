@@ -54,9 +54,9 @@ void AGameManager::PropagateStateChangedEvent(const EMortalisGameState NewState)
 		}
 		case EMortalisGameState::Restarting:
 		{
-			if (OnLevelFinishedEvent.IsBound())
+			if (OnLevelRestartEvent.IsBound())
 			{
-				OnLevelFinishedEvent.Broadcast();
+				OnLevelRestartEvent.Broadcast();
 			}
 			break;
 		}
@@ -93,6 +93,7 @@ void AGameManager::HideLevelFinishedMenu()
 void AGameManager::RestartGame()
 {
 	UE_LOG(LogTemp, Log, TEXT("Restarting game..."));
+	GameStateManager::Get().AddStateChange(EMortalisGameState::Restarting);
 }
 
 void AGameManager::ExitToMainMenu()
