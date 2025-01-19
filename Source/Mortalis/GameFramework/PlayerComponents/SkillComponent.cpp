@@ -21,19 +21,6 @@ USkillComponent::USkillComponent()
 void USkillComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TArray<AActor*> GameManagerActors {};
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameManager::StaticClass(), GameManagerActors);
-
-	if (GameManagerActors.Num() != 1)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Expected exactly one GameManager actor, found: %d"), GameManagerActors.Num());
-	}
-	else
-	{
-		auto* GameManager = (AGameManager*)(GameManagerActors[0]);
-		GameManager->OnLevelRestartEvent.AddUObject(this, &USkillComponent::OnRestart);
-	}
 }
 
 
@@ -43,9 +30,4 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-}
-
-void USkillComponent::OnRestart()
-{
-	UE_LOG(LogTemp, Log, TEXT("[SkillComponent] Restarting..."));
 }

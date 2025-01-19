@@ -5,6 +5,7 @@
 #include "Components/SlateWrapperTypes.h"
 #include "Layout/Visibility.h"
 #include "UI/Menus/GameFinishedMenu.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGameManager::AGameManager()
@@ -94,6 +95,7 @@ void AGameManager::RestartGame()
 {
 	UE_LOG(LogTemp, Log, TEXT("Restarting game..."));
 	GameStateManager::Get().AddStateChange(EMortalisGameState::Restarting);
+	UGameplayStatics::OpenLevel(GetWorld(), "SubLevelsTestMain");
 }
 
 void AGameManager::ExitToMainMenu()

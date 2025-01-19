@@ -2,6 +2,7 @@
 
 
 #include "ArcherCharacter.h"
+#include "GameFramework/GameMode.h"
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
@@ -24,19 +25,6 @@ AArcherCharacter::AArcherCharacter()
 	NormalAttackComponent = CreateDefaultSubobject<UNormalAttackComponent>(TEXT("Normal attack Component"));
 	SpecialAttackComponent = CreateDefaultSubobject<USpecialAttackComponent>(TEXT("Special attack Component"));
 	// SkillAttackComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill Component"));
-
-	TArray<AActor*> GameManagerActors {};
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameManager::StaticClass(), GameManagerActors);
-
-	if (GameManagerActors.Num() != 1)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Expected exactly one GameManager actor, found: %d"), GameManagerActors.Num());
-	}
-	else
-	{
-		auto* GameManager = (AGameManager*)(GameManagerActors[0]);
-		GameManager->OnLevelRestartEvent.AddUObject(this, &AArcherCharacter::OnRestart);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -133,9 +121,4 @@ void AArcherCharacter::HandlePlayerDeath()
 	bIsDead = true;
 	SetActorEnableCollision(false);
 	GameStateManager::Get().AddStateChange(EMortalisGameState::PlayerDead);
-}
-
-void AArcherCharacter::OnRestart()
-{
-	UE_LOG(LogTemp, Log, TEXT("[ArcherCharacter] Restarting..."));
 }

@@ -31,9 +31,6 @@ protected:
 	virtual void BeginPlay() override;		
 
 private:
-	UFUNCTION()
-	void OnRestart();
-
 	void ExecuteAttack(UPlayerStatisticsComponent* PlayerStatistics);
 
 	bool CanExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics) const;

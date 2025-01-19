@@ -30,9 +30,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-	void OnRestart();
-
 	void UpdateAttackCooldown(float DeltaTime);
 
 	void ExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics);

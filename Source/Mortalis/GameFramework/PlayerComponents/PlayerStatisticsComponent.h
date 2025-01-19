@@ -60,9 +60,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-	void OnRestart();
-
 	void ApplyRegenerations(float DeltaTime);
 
 private:
