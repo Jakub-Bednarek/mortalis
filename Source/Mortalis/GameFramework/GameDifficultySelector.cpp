@@ -2,6 +2,8 @@
 
 
 #include "GameDifficultySelector.h"
+#include "GameManager.h"
+
 #include "Engine/LatentActionManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ObjectMacros.h"
@@ -51,5 +53,7 @@ void AGameDifficultySelector::HardDifficultySelect()
 
 void AGameDifficultySelector::LoadSelectedLevel(GameDifficulty SelectedDifficulty)
 {
+	GameStateManager::Get().AddStateChange(EMortalisGameState::LevelLoading);
 	UGameplayStatics::OpenLevel(GetWorld(), "SubLevelsTestMain");
+	GameStateManager::Get().AddStateChange(EMortalisGameState::Playing);
 }
