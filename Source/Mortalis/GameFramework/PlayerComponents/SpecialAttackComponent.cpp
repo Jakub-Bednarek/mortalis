@@ -56,18 +56,19 @@ bool USpecialAttackComponent::CanExecuteAttack(const UPlayerStatisticsComponent*
 
 FVector USpecialAttackComponent::CalculateAttackDirection() const
 {
-	float MouseX;
-	float MouseY;
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetMousePosition(MouseX, MouseY);
+	FHitResult Hit;
+	bool bHitSuccessful = false;
 
-	auto Direction = (ViewportCenter - FVector(MouseX, MouseY, 0.0f));
-	Direction.Normalize();
-	Direction = FVector(Direction.Y, -Direction.X, 0.0f); // Swap X and Y coordinates to align with world axis
-
-	if (Direction.X == 0.0f and Direction.Y == 0.0f)
+	// Most likely inefficient
+	auto* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	bHitSuccessful = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+	
+	APawn* ControlledPawn = PlayerController->GetPawn();
+	if (ControlledPawn != nullptr)
 	{
-		return FVector(0.5f, 0.5f, 0.0f);
+		auto ResultDirection = (Hit.Location - ControlledPawn->GetActorLocation()).GetSafeNormal();
+		return FVector { ResultDirection.X, ResultDirection.Y, 0.0f };
 	}
 
-	return Direction;
+	return {};
 }
