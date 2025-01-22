@@ -84,13 +84,15 @@ public:
     template <typename T>
     static T::Builder Create()
     {
-        constexpr FUpgradeIndex SKILL_INDEX_LOWER_RANGE { 0 };
-        constexpr FUpgradeIndex SKILL_INDEX_UPPER_RANGE { 1024 };
-        static IndexGenerator<FUpgradeIndex, SKILL_INDEX_LOWER_RANGE, SKILL_INDEX_UPPER_RANGE> Generator {};
 
         auto* UpgradeInstance = NewObject<T>();
         return { UpgradeInstance, Generator.Next() };
     }
+
+private:
+    static constexpr FUpgradeIndex SKILL_INDEX_LOWER_RANGE { 0 };
+    static constexpr FUpgradeIndex SKILL_INDEX_UPPER_RANGE { 1024 };
+    inline static IndexGenerator<FUpgradeIndex, SKILL_INDEX_LOWER_RANGE, SKILL_INDEX_UPPER_RANGE> Generator {};
 };
 
 template <typename T, typename U>
@@ -107,8 +109,6 @@ public:
     U& WithName(FName Name) { Target->SetName(MoveTemp(Name)); return *(static_cast<U*>(this)); }
 
     U& WithDescription(FName Description) { Target->SetDescription(MoveTemp(Description)); return *(static_cast<U*>(this)); }
-
-    // UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->SetCategory(Category); return *this; }
 
     T* Build() { return Target; }
 

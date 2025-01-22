@@ -37,7 +37,7 @@ struct Chain
         return bIsExhausted;
     }
 
-    T GetNextCandidate()
+    T& GetNextCandidate()
     {
         check(Upgrades.Num() > 0);
         check(NextUpgradeIndex != Upgrades.Num());

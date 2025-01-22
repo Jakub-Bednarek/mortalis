@@ -60,7 +60,7 @@ public:
 	{
 		check(not bIsExhausted);
 
-		const auto RandomElementIndex = FMath::RandRange(0, (ActiveChains.Num() - 2));
+		const auto RandomElementIndex = FMath::RandRange(0, (ActiveChains.Num() - 1));
 		if (not ActiveChains.IsValidIndex(RandomElementIndex))
 		{
 			UE_LOG(LogTemp, Error, TEXT("Generated Index is not a valid index for active chain."));
@@ -77,11 +77,29 @@ public:
 		return SelectedChain->GetNextCandidate()->GetUIData();
 	}
 
+	TArray<FUpgradeUIData> GetUIDataFromRandomlySelected(int32 Count)
+	{
+		TArray<FChainIndex> NotSelectedChains (ActiveChains);
+		TArray<FUpgradeUIData> SelectedUpgradesUIData {};
+
+		for (auto i = 0; i < Count; i++)
+		{
+			const auto RandomElementIndex = FMath::RandRange(0, (NotSelectedChains.Num() - 1));
+			SelectedUpgradesUIData.Add(RegisteredChains[NotSelectedChains[RandomElementIndex]].GetNextCandidate()->GetUIData());
+
+			if (not (NotSelectedChains.Num() == 1))
+			{
+				NotSelectedChains.RemoveAt(RandomElementIndex);
+			}
+		}
+
+		return SelectedUpgradesUIData;
+	}
+
 	Chain<T> CreateChain()
 	{
 		auto Index = ChainIndexGenerator.Next();
-		
-        UE_LOG(LogTemp, Error, TEXT("New index generated: %d"), Index.Value);
+
 		return Chain<T> { Index };
 	}
 

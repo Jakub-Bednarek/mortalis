@@ -65,37 +65,6 @@ void AUpgradesSystem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-TArray<FUpgradeUIData> AUpgradesSystem::GenerateUpgradeChoices(const uint8 Count, const TArray<EUpgradeCategory>& ActiveUpgradePools)
-{
-	TArray<FUpgradeUIData> GeneratedUpgrades {};
-
-	for (auto i = 0; i < DefaultNumberOfUpgradesToGenerate; i++)
-	{
-		auto CategoryToSelect = GetRandomUpgradeCategory(ActiveUpgradePools);
-
-		switch (CategoryToSelect)
-		{
-			case EUpgradeCategory::Statistics:
-				GeneratedUpgrades.Add(StatisticsUpgradesPool.GetUIDataFromRandomlySelected());
-				break;
-			case EUpgradeCategory::NormalAttack:
-				GeneratedUpgrades.Add(NormalAttackUpgradesPool.GetUIDataFromRandomlySelected());
-				break;
-			case EUpgradeCategory::SpecialAttack:
-				GeneratedUpgrades.Add(SpecialAttackUpgradesPool.GetUIDataFromRandomlySelected());
-				break;
-			case EUpgradeCategory::Skill:
-				GeneratedUpgrades.Add(SkillsUpgradesPool.GetUIDataFromRandomlySelected());
-				break;
-			default:
-				UE_LOG(LogTemp, Error, TEXT("Unknown category selected for skill upgrade: %d"), CategoryToSelect);
-				break;
-		}
-	}
-
-	return GeneratedUpgrades;
-}
-
 EUpgradeCategory AUpgradesSystem::GetRandomUpgradeCategory(const TArray<EUpgradeCategory>& ActiveUpgradesPools) const
 {
 	static int32 UpgradeCategoryLowerBound = 0;
@@ -138,20 +107,21 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 		return;
 	}
 
-	auto GeneratedUpgradeChoicesData = GenerateUpgradeChoices(DefaultNumberOfUpgradesToGenerate, ActiveUpgradesPools);
+	auto GeneratedUpgradeChoicesData = StatisticsUpgradesPool.GetUIDataFromRandomlySelected(DefaultNumberOfUpgradesToGenerate);
+	UE_LOG(LogTemp, Error, TEXT("Num of entries: %d"), GeneratedUpgradeChoicesData.Num());
 	if (OnUpgradeProcedureBegin.IsBound())
 	{
 		OnUpgradeProcedureBegin.Broadcast(GeneratedUpgradeChoicesData);
 	}
 
-	UpgradeSelectionWidget->ShowSelectionMenu(GeneratedUpgradeChoicesData);
+	UpgradeSelectionWidget->ShowSelectionMenu(MoveTemp(GeneratedUpgradeChoicesData));
 
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
 void AUpgradesSystem::FinishUpgradeProcedure(const FUpgradeIndex Index, const EUpgradeCategory Category)
 {
-	UE_LOG(LogTemp, Verbose, TEXT("Finishing upgrade procedure."));
+	UE_LOG(LogTemp, Verbose, TEXT("Finishing upgrade procedure, selected upgrade: %d."), Index.Value);
 
 	MarkAndPropagateSelectedUpgrade(Index, Category);
 	UpgradeSelectionWidget->HideSelectionMenu();
@@ -353,7 +323,7 @@ void AUpgradesSystem::RegisterStatisticsUpgrades()
 	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade1);
 	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade2);
 	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade3);
-	StatisticsUpgradesPool.RegisterChain(MoveTemp(MovementSpeedUpgradeChain));
+	StatisticsUpgradesPool.RegisterChain(MoveTemp(RegenerationUpgradeChain));
 }
 
 void AUpgradesSystem::RegisterNormalAttackUpgrades()

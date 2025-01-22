@@ -16,7 +16,6 @@ struct FChainIndex
         return temp;
     }
 
-
     bool operator>(const FChainIndex& Rhs) const
     {
         return Value > Rhs.Value;

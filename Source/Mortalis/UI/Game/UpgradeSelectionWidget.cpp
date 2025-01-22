@@ -15,16 +15,18 @@ void UUpgradeSelectionWidget::InitializeBindings()
 
 void UUpgradeSelectionWidget::ShowSelectionMenu(TArray<FUpgradeUIData> UpgradeChoices)
 {
-    FirstOption->SetName(FText::FromName(UpgradeChoices[0].Name));
-    FirstOption->SetDescription(FText::FromName(UpgradeChoices[0].Description));
-    
-    SecondOption->SetName(FText::FromName(UpgradeChoices[1].Name));
-    SecondOption->SetDescription(FText::FromName(UpgradeChoices[1].Description));
-    
-    ThirdOption->SetName(FText::FromName(UpgradeChoices[2].Name));
-    ThirdOption->SetDescription(FText::FromName(UpgradeChoices[2].Description));
-
+    check(UpgradeChoices.Num() == 3);
     UIData = MoveTemp(UpgradeChoices);
+
+    FirstOption->SetName(FText::FromName(UIData[0].Name));
+    FirstOption->SetDescription(FText::FromName(UIData[0].Description));
+    
+    SecondOption->SetName(FText::FromName(UIData[1].Name));
+    SecondOption->SetDescription(FText::FromName(UIData[1].Description));
+    
+    ThirdOption->SetName(FText::FromName(UIData[2].Name));
+    ThirdOption->SetDescription(FText::FromName(UIData[2].Description));
+
 	SetVisibility(ESlateVisibility::Visible);
 }
 
@@ -35,22 +37,16 @@ void UUpgradeSelectionWidget::HideSelectionMenu()
 
 void UUpgradeSelectionWidget::OnFirstOptionSelected()
 {
-    check(UIData.Num() == 3);
-
     OnOptionSelected(UIData[0].Index, UIData[0].Category);
 }
 
 void UUpgradeSelectionWidget::OnSecondOptionSelected()
 {
-    check(UIData.Num() == 3);
-
     OnOptionSelected(UIData[1].Index, UIData[1].Category);
 }
 
 void UUpgradeSelectionWidget::OnThirdOptionSelected()
 {
-    check(UIData.Num() == 3);
-
     OnOptionSelected(UIData[2].Index, UIData[2].Category);
 }
 

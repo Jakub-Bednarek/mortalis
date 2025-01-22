@@ -38,7 +38,7 @@ struct FPoolIndex
 
     bool operator==(const FPoolIndex& Rhs) const
     {
-        return Value == Value;
+        return Value == Rhs.Value;
     }
 
     uint32 Value;
