@@ -3,6 +3,7 @@
 
 #include "GameManager.h"
 #include "Components/SlateWrapperTypes.h"
+#include "GameFramework/Systems/ExperienceSystem.h"
 #include "Layout/Visibility.h"
 #include "UI/Menus/GameFinishedMenu.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,6 +26,18 @@ void AGameManager::BeginPlay()
 	GameFinishedMenu->ContinueButton->OnClicked.AddDynamic(this, &AGameManager::ExitToMainMenu);
 
 	HideLevelFinishedMenu();
+
+	TArray<AActor*> ExperienceSystemActors {};
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AExperienceSystem::StaticClass(), ExperienceSystemActors);
+	if(ExperienceSystemActors.Num() != 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Expected exactly 1 ExperienceSystem actor, found %d."), ExperienceSystemActors.Num());
+	}
+	else
+	{
+		ExperienceSystem = (AExperienceSystem*)(ExperienceSystemActors[0]);
+
+	}
 }
 
 // Called every frame
@@ -79,6 +92,11 @@ void AGameManager::ShowLevelFinishedMenu()
 {
 	if (GameFinishedMenu)
 	{
+		if (ExperienceSystem)
+		{
+			GameFinishedMenu->SetScore(ExperienceSystem->GetMonstersKilled());
+		}
+
 		GameFinishedMenu->SetVisibility(ESlateVisibility::Visible);
 	}
 }
@@ -101,4 +119,6 @@ void AGameManager::RestartGame()
 void AGameManager::ExitToMainMenu()
 {
 	UE_LOG(LogTemp, Log, TEXT("Exitting to main menu..."));
+	GameStateManager::Get().AddStateChange(EMortalisGameState::Restarting);
+	UGameplayStatics::OpenLevel(GetWorld(), "LevelSelectionLevel");
 }

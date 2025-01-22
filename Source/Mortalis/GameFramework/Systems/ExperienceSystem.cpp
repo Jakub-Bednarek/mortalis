@@ -41,6 +41,13 @@ void AExperienceSystem::AddExperience(const float Experience)
 	{
 		OnExperienceGainedEvent.Broadcast(CurrentExperience, ExperienceForNextLevel);
 	}
+
+	++MonstersKilled;
+}
+
+int32 AExperienceSystem::GetMonstersKilled() const
+{
+	return MonstersKilled;
 }
 
 bool AExperienceSystem::CanLevelUp() const

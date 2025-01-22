@@ -108,7 +108,6 @@ void AUpgradesSystem::StartUpgradeProcedure(uint32 Level)
 	}
 
 	auto GeneratedUpgradeChoicesData = StatisticsUpgradesPool.GetUIDataFromRandomlySelected(DefaultNumberOfUpgradesToGenerate);
-	UE_LOG(LogTemp, Error, TEXT("Num of entries: %d"), GeneratedUpgradeChoicesData.Num());
 	if (OnUpgradeProcedureBegin.IsBound())
 	{
 		OnUpgradeProcedureBegin.Broadcast(GeneratedUpgradeChoicesData);

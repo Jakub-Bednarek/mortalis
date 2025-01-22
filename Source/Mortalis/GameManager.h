@@ -3,6 +3,7 @@
 #pragma once
 
 #include "UI/Menus/GameFinishedMenu.h"
+#include "GameFramework/Systems/ExperienceSystem.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -57,6 +58,7 @@ private:
 	void ExitToMainMenu();
 
 private:
+	TObjectPtr<AExperienceSystem> ExperienceSystem;
 	TObjectPtr<UGameFinishedMenu> GameFinishedMenu;
 };
 

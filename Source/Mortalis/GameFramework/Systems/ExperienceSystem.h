@@ -23,6 +23,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddExperience(float Experience);
 
+	UFUNCTION()
+	int32 GetMonstersKilled() const;
 public:	
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnCharacterLevelUp OnCharacterLevelUp;
@@ -44,4 +46,6 @@ private:
 
 	float CurrentExperience = 0;
 	float ExperienceForNextLevel = 100;
+
+	int32 MonstersKilled = 0;
 };
