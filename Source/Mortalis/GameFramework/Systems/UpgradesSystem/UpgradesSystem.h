@@ -80,7 +80,11 @@ private:
 
 	EUpgradeCategory GetRandomUpgradeCategory(const TArray<EUpgradeCategory>& ActiveUpgradesPools) const;
 
-	void RegisterTestUpgrades();
+	void RegisterStatisticsUpgrades();
+	void RegisterNormalAttackUpgrades();
+	void RegisterSpecialAttackUpgrades();
+	void RegisterSkillUpgrades();
+	void RegisterUpgrades();
 
 	void MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category);
 

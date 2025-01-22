@@ -2,14 +2,14 @@
 
 #include "GameFramework/Systems/UpgradesSystem/Upgrades/SkillComponentUpgrade.h"
 
-#include "FireballSkillUpgrade.generated.h"
+#include "SkillUpgrades.generated.h"
 
 UCLASS()
 class UFireballSkillUpgrade : public USkillComponentUpgrade
 {
     GENERATED_BODY()
     
-    class FireballSkillUpgradeBuilder : public UpgradeBaseBuilder<UFireballSkillUpgrade>
+    class FireballSkillUpgradeBuilder : public UpgradeBaseBuilder<UFireballSkillUpgrade, FireballSkillUpgradeBuilder>
     {
     public:
         FireballSkillUpgradeBuilder(UFireballSkillUpgrade* Target, FUpgradeIndex&& Index) : UpgradeBaseBuilder(Target, MoveTemp(Index)) {}

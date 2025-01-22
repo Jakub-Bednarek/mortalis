@@ -9,16 +9,18 @@
 #include "Internationalization/Internationalization.h"
 #include "Logging/LogMacros.h"
 #include "Logging/LogVerbosity.h"
+
+#include "Templates/UnrealTemplate.h"
 #include "Upgrades/NormalAttackComponentUpgrade.h"
 #include "Upgrades/SkillComponentUpgrade.h"
 #include "Upgrades/SpecialAttackComponentUpgrade.h"
 #include "Upgrades/StatisticsComponentUpgrade.h"
 #include "Upgrades/UpgradeUIData.h"
 
-#include "Upgrades/HealthUpgrade.h"
-#include "Upgrades/FireballSkillUpgrade.h"
-#include "Upgrades/NormalAttackDamageUpgrade.h"
-#include "Upgrades/SpecialAttackDamageUpgrade.h"
+#include "Upgrades/StatisticsUpgrades.h"
+#include "Upgrades/SkillUpgrades.h"
+#include "Upgrades/NormalAttackUpgrades.h"
+#include "Upgrades/SpecialAttackUpgrades.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
@@ -31,7 +33,7 @@ void AUpgradesSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	RegisterTestUpgrades();
+	RegisterUpgrades();
 
 	if (not ExperienceSystem)
 	{
@@ -208,15 +210,171 @@ void AUpgradesSystem::MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgr
 	}
 }
 
-void AUpgradesSystem::RegisterTestUpgrades()
+void AUpgradesSystem::RegisterStatisticsUpgrades()
 {
 	auto HealthUpgradeChain = StatisticsUpgradesPool.CreateChain();
 	auto* HealthUpgrade1 = 
-		UpgradeFactory::Create<UHealthUpgrade>()
+		UpgradeFactory::Create<UStatisticsHealthUpgrade>()
 		.WithName(FName(TEXT("Health Upgrade 1")))
-		.WithDescription(FName(TEXT("Test description")))
+		.WithDescription(FName(TEXT("Adds 5 maximum health")))
+		.WithHealthValue(5)
+		.Build();
+	
+	auto* HealthUpgrade2 = 
+		UpgradeFactory::Create<UStatisticsHealthUpgrade>()
+		.WithName(FName(TEXT("Health Upgrade 2")))
+		.WithDescription(FName(TEXT("Adds 6 maximum health")))
+		.WithHealthValue(6)
+		.Build();
+		
+	auto* HealthUpgrade3 = 
+		UpgradeFactory::Create<UStatisticsHealthUpgrade>()
+		.WithName(FName(TEXT("Health Upgrade 3")))
+		.WithDescription(FName(TEXT("Adds 7 maximum health")))
+		.WithHealthValue(7)
+		.Build();
+
+	auto* HealthUpgrade4 = 
+		UpgradeFactory::Create<UStatisticsHealthUpgrade>()
+		.WithName(FName(TEXT("Health Upgrade 4")))
+		.WithDescription(FName(TEXT("Adds 8 maximum health")))
+		.WithHealthValue(8)
+		.Build();
+		
+	auto* HealthUpgrade5 = 
+		UpgradeFactory::Create<UStatisticsHealthUpgrade>()
+		.WithName(FName(TEXT("Health Upgrade 5")))
+		.WithDescription(FName(TEXT("Adds 10 maximum health")))
+		.WithHealthValue(10)
 		.Build();
 
 	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade1);
-	StatisticsUpgradesPool.RegisterChain({0}, MoveTemp(HealthUpgradeChain));
+	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade2);
+	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade3);
+	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade4);
+	HealthUpgradeChain.RegisterUpgrade(HealthUpgrade5);
+	StatisticsUpgradesPool.RegisterChain(MoveTemp(HealthUpgradeChain));
+
+	auto DamageUpgradeChain = StatisticsUpgradesPool.CreateChain();
+	auto* DamageUpgrade1 =
+		UpgradeFactory::Create<UStatisticsDamageUpgrade>()
+		.WithName(FName(TEXT("Damage Upgrade 1")))
+		.WithDescription(FName(TEXT("Increases damage by 10")))
+		.WithDamageValue(10.0f)
+		.Build();
+	
+	auto* DamageUpgrade2 =
+		UpgradeFactory::Create<UStatisticsDamageUpgrade>()
+		.WithName(FName(TEXT("Damage Upgrade 2")))
+		.WithDescription(FName(TEXT("Increases damage by 15")))
+		.WithDamageValue(15.0f)
+		.Build();
+		
+	auto* DamageUpgrade3 =
+		UpgradeFactory::Create<UStatisticsDamageUpgrade>()
+		.WithName(FName(TEXT("Damage Upgrade 3")))
+		.WithDescription(FName(TEXT("Increases damage by 20")))
+		.WithDamageValue(20.0f)
+		.Build();
+		
+	auto* DamageUpgrade4 =
+		UpgradeFactory::Create<UStatisticsDamageUpgrade>()
+		.WithName(FName(TEXT("Damage Upgrade 4")))
+		.WithDescription(FName(TEXT("Increases damage by 25")))
+		.WithDamageValue(25.0f)
+		.Build();
+		
+	auto* DamageUpgrade5 =
+		UpgradeFactory::Create<UStatisticsDamageUpgrade>()
+		.WithName(FName(TEXT("Damage Upgrade 5")))
+		.WithDescription(FName(TEXT("Increases damage by 30")))
+		.WithDamageValue(30.0f)
+		.Build();
+	
+	DamageUpgradeChain.RegisterUpgrade(DamageUpgrade1);
+	DamageUpgradeChain.RegisterUpgrade(DamageUpgrade2);
+	DamageUpgradeChain.RegisterUpgrade(DamageUpgrade3);
+	DamageUpgradeChain.RegisterUpgrade(DamageUpgrade4);
+	DamageUpgradeChain.RegisterUpgrade(DamageUpgrade5);
+	StatisticsUpgradesPool.RegisterChain(MoveTemp(DamageUpgradeChain));
+
+	auto MovementSpeedUpgradeChain = StatisticsUpgradesPool.CreateChain();
+	auto* MovementSpeedUpgrade1 =
+		UpgradeFactory::Create<UStatisticsMovementSpeedUpgrade>()
+		.WithName(FName(TEXT("Movement Speed Upgrade 1")))
+		.WithDescription(FName(TEXT("Increases movement speed by 30")))
+		.WithMovementSpeedValue(30.0f)
+		.Build();
+		
+	auto* MovementSpeedUpgrade2 =
+		UpgradeFactory::Create<UStatisticsMovementSpeedUpgrade>()
+		.WithName(FName(TEXT("Movement Speed Upgrade 2")))
+		.WithDescription(FName(TEXT("Increases movement speed by 40")))
+		.WithMovementSpeedValue(40.0f)
+		.Build();
+		
+	auto* MovementSpeedUpgrade3 =
+		UpgradeFactory::Create<UStatisticsMovementSpeedUpgrade>()
+		.WithName(FName(TEXT("Movement Speed Upgrade 3")))
+		.WithDescription(FName(TEXT("Increases movement speed by 50")))
+		.WithMovementSpeedValue(50.0f)
+		.Build();
+	
+	MovementSpeedUpgradeChain.RegisterUpgrade(MovementSpeedUpgrade1);
+	MovementSpeedUpgradeChain.RegisterUpgrade(MovementSpeedUpgrade2);
+	MovementSpeedUpgradeChain.RegisterUpgrade(MovementSpeedUpgrade3);
+	StatisticsUpgradesPool.RegisterChain(MoveTemp(MovementSpeedUpgradeChain));
+	
+	auto RegenerationUpgradeChain = StatisticsUpgradesPool.CreateChain();
+	auto* RegenerationUpgrade1 =
+		UpgradeFactory::Create<UStatisticsRegenerationUpgrade>()
+		.WithName(FName(TEXT("Regeneration Upgrade 1")))
+		.WithDescription(FName(TEXT("Increases Health Regeneration by 0.2\nIncrease Mana Regeneration by 5.0")))
+		.WithHealthRegenerationValue(0.2f)
+		.WithManaRegenerationValue(5.0f)
+		.Build();
+		
+	auto* RegenerationUpgrade2 =
+		UpgradeFactory::Create<UStatisticsRegenerationUpgrade>()
+		.WithName(FName(TEXT("Regeneration Upgrade 2")))
+		.WithDescription(FName(TEXT("Increases Health Regeneration by 0.35\nIncrease Mana Regeneration by 7.5")))
+		.WithHealthRegenerationValue(0.35f)
+		.WithManaRegenerationValue(7.5f)
+		.Build();
+		
+	auto* RegenerationUpgrade3 =
+		UpgradeFactory::Create<UStatisticsRegenerationUpgrade>()
+		.WithName(FName(TEXT("Regeneration Upgrade 3")))
+		.WithDescription(FName(TEXT("Increases Health Regeneration by 0.5\nIncrease Mana Regeneration by 10.0")))
+		.WithHealthRegenerationValue(0.5f)
+		.WithManaRegenerationValue(10.0f)
+		.Build();
+	
+	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade1);
+	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade2);
+	RegenerationUpgradeChain.RegisterUpgrade(RegenerationUpgrade3);
+	StatisticsUpgradesPool.RegisterChain(MoveTemp(MovementSpeedUpgradeChain));
+}
+
+void AUpgradesSystem::RegisterNormalAttackUpgrades()
+{
+	
+}
+
+void AUpgradesSystem::RegisterSpecialAttackUpgrades()
+{
+	
+}
+
+void AUpgradesSystem::RegisterSkillUpgrades()
+{
+	
+}
+
+void AUpgradesSystem::RegisterUpgrades()
+{
+	RegisterStatisticsUpgrades();
+	RegisterNormalAttackUpgrades();
+	RegisterSpecialAttackUpgrades();
+	RegisterSkillUpgrades();
 }

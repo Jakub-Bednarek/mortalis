@@ -32,6 +32,21 @@ public:
 	void ChangeCurrentMana(float Delta);
 
 	UFUNCTION(BlueprintCallable)
+	void IncreaseDamage(float Delta);
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseAttackSpeed(float Delta);
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseMovementSpeed(float Delta);
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseHealthRegeneration(float Delta);
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseManaRegeneration(float Delta);
+
+	UFUNCTION(BlueprintCallable)
 	void TakeDamage(float Damage);
 
 	UFUNCTION(BlueprintCallable)

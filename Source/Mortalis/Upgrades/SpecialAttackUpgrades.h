@@ -3,14 +3,14 @@
 
 #include "GameFramework/Systems/UpgradesSystem/Upgrades/SpecialAttackComponentUpgrade.h"
 
-#include "SpecialAttackDamageUpgrade.generated.h"
+#include "SpecialAttackUpgrades.generated.h"
 
 UCLASS()
 class USpecialAttackDamageUpgrade : public USpecialAttackComponentUpgrade
 {
     GENERATED_BODY()
     
-    class SpecialAttackDamageUpgradeBuilder : public UpgradeBaseBuilder<USpecialAttackDamageUpgrade>
+    class SpecialAttackDamageUpgradeBuilder : public UpgradeBaseBuilder<USpecialAttackDamageUpgrade, SpecialAttackDamageUpgradeBuilder>
     {
     public:
         SpecialAttackDamageUpgradeBuilder(USpecialAttackDamageUpgrade* Target, FUpgradeIndex&& Index) : UpgradeBaseBuilder(Target, MoveTemp(Index)) {}

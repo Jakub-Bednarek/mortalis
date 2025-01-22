@@ -39,7 +39,7 @@ struct FChainIndex
 
     bool operator==(const FChainIndex& Rhs) const
     {
-        return Value == Value;
+        return Value == Rhs.Value;
     }
 
     uint32 Value;

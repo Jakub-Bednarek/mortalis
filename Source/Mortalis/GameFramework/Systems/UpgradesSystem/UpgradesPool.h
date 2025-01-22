@@ -28,29 +28,32 @@ class MORTALIS_API UpgradesPool
 	friend class UpgradesPoolFactory<T>;
 
 public:
-	UpgradesPool(): Index(PoolIndexGenerator.Next()), bIsExhausted(true) {}
+	UpgradesPool(): bIsExhausted(true) {}
 	~UpgradesPool() {}
 
-	void RegisterChain(FChainIndex ChainIndex, Chain<T>&& Value)
+	void RegisterChain(Chain<T>&& Value)
 	{
+		if (RegisteredChains.Contains(Value.GetIndex()))
+		{
+			UE_LOG(LogTemp, Error, TEXT("Upgrades chain with index: %d is already registered."), Value.GetIndex().Value);
+			return;
+		}
+
 		if (not Value.IsExhausted())
 		{
 			bIsExhausted = false;
 		}
 
-		AddMappingForAllChainUpgrades(Value.GetAllUpgradesIndexes(), ChainIndex);
+		AddMappingForAllChainUpgrades(Value.GetIndex(), Value.GetAllUpgradesIndexes());
 		ActiveChains.Add(Value.GetIndex());
 		RegisteredChains.Emplace(Value.GetIndex(), MoveTemp(Value));
+
+		UE_LOG(LogTemp, Log, TEXT("Successfuly registered new chain with index: %d"), Value.GetIndex().Value);
 	}
 
 	bool IsExhausted() const
 	{
 		return bIsExhausted;
-	}
-
-	FPoolIndex GetIndex() const
-	{
-		return Index;
 	}
 
 	FUpgradeUIData GetUIDataFromRandomlySelected()
@@ -76,7 +79,10 @@ public:
 
 	Chain<T> CreateChain()
 	{
-		return Chain<T> { FChainIndex { 0 } };
+		auto Index = ChainIndexGenerator.Next();
+		
+        UE_LOG(LogTemp, Error, TEXT("New index generated: %d"), Index.Value);
+		return Chain<T> { Index };
 	}
 
 	T SelecteNextUpgrade(const FUpgradeIndex UpgradeIndex)
@@ -113,7 +119,7 @@ public:
 	}
 
 private:
-	void AddMappingForAllChainUpgrades(const TArray<FUpgradeIndex>& UpgradeIndexes, const FChainIndex ChainIndex)
+	void AddMappingForAllChainUpgrades(const FChainIndex ChainIndex, const TArray<FUpgradeIndex>& UpgradeIndexes)
 	{
 		for (const auto UpgradeIndex : UpgradeIndexes)
 		{
@@ -122,15 +128,14 @@ private:
 	}
 
 private:
-	static constexpr FPoolIndex MIN_POOL_INDEX { 0 };
-	static constexpr FPoolIndex MAX_POOL_INDEX { 128 };
-	inline static IndexGenerator<FPoolIndex, MIN_POOL_INDEX, MAX_POOL_INDEX> PoolIndexGenerator {};
+	static constexpr FChainIndex MIN_CHAIN_INDEX { 0 };
+	static constexpr FChainIndex MAX_CHAIN_INDEX { 128 };
+	IndexGenerator<FChainIndex, MIN_CHAIN_INDEX, MAX_CHAIN_INDEX> ChainIndexGenerator {};
 
 	// BLEH, need to find a better way, that's gonna hurt cache imo and looks ugly af
 	TMap<FUpgradeIndex, FChainIndex> UpgradeToChainMapping {};
 	TMap<FChainIndex, Chain<T>> 	 RegisteredChains {};
 	TArray<FChainIndex> 			 ActiveChains {};
 	TSet<FChainIndex> 				 ExhaustedChains {};
-	FPoolIndex						 Index {};
 	bool							 bIsExhausted;
 };

@@ -7,9 +7,6 @@
 
 #include "CoreMinimal.h"
 
-template <typename T>
-class UpgradeBaseBuilder;
-
 UENUM()
 enum class UpgradeState : uint8
 {
@@ -96,7 +93,7 @@ public:
     }
 };
 
-template <typename T>
+template <typename T, typename U>
 class UpgradeBaseBuilder
 {
 public:
@@ -107,9 +104,9 @@ public:
         Target->SetIndex(MoveTemp(Index));
     }
 
-    UpgradeBaseBuilder& WithName(FName Name) { Target->SetName(MoveTemp(Name)); return *this; }
+    U& WithName(FName Name) { Target->SetName(MoveTemp(Name)); return *(static_cast<U*>(this)); }
 
-    UpgradeBaseBuilder& WithDescription(FName Description) { Target->SetDescription(MoveTemp(Description)); return *this; }
+    U& WithDescription(FName Description) { Target->SetDescription(MoveTemp(Description)); return *(static_cast<U*>(this)); }
 
     // UpgradeBaseBuilder& WithCategory(EUpgradeCategory Category) { Target->SetCategory(Category); return *this; }
 

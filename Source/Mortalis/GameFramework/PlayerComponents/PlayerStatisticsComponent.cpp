@@ -77,6 +77,32 @@ void UPlayerStatisticsComponent::ChangeMaxMana(const float Delta)
 	PlayerStatisticsHUD->SetMana(CurrentMana, MaxMana);
 }
 
+
+void UPlayerStatisticsComponent::IncreaseDamage(float Delta)
+{
+	BaseNormalAttackDamage += Delta;
+}
+
+void UPlayerStatisticsComponent::IncreaseAttackSpeed(float Delta)
+{
+	AttacksPerSecond += Delta;
+}
+
+void UPlayerStatisticsComponent::IncreaseMovementSpeed(float Delta)
+{
+	MovementSpeed += Delta;
+}
+
+void UPlayerStatisticsComponent::IncreaseHealthRegeneration(float Delta)
+{
+	HealthRegenerationPerSecond += Delta;
+}
+
+void UPlayerStatisticsComponent::IncreaseManaRegeneration(float Delta)
+{
+	ManaRegenerationPerSecond += Delta;
+}
+
 float UPlayerStatisticsComponent::GetAttacksPerSecond() const
 {
 	return AttacksPerSecond;

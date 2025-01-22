@@ -171,14 +171,16 @@ void UActorSpawnerComponent::SpawnActor(const int32 Index, const FVector& Locati
 	auto SpawnedEnemy = GetWorld()->SpawnActor<AEnemyBase>(ActorsSpawnPool[Index].Get(), Location, FRotator(0.0f));
 	if (not IsValid(SpawnedEnemy))
 	{
-		// DEBUG purposes
 		UE_LOG(LogTemp, Error, TEXT("Spawned enemy is not valid"));
 		// throw std::exception();
 	}
-	
-	SpawnedEnemy->OnDeathEvent.AddDynamic(ExperienceSystem, &AExperienceSystem::AddExperience);
+	else
+	{
+		SpawnedEnemy->OnDeathEvent.AddDynamic(ExperienceSystem, &AExperienceSystem::AddExperience);
 
-	SpawnedActors.Add(SpawnedEnemy);
+		SpawnedActors.Add(SpawnedEnemy);
+	}
+	
 }
 
 bool UActorSpawnerComponent::ShouldSpawnActors(const float DeltaTime)
