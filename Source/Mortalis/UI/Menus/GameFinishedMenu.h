@@ -18,6 +18,9 @@ class MORTALIS_API UGameFinishedMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	void SetScore(int32 Score);
+
+public:
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
 	UButton* ContinueButton;
 

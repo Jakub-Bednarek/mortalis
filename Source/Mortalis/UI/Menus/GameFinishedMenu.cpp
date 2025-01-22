@@ -3,3 +3,7 @@
 
 #include "UI/Menus/GameFinishedMenu.h"
 
+void UGameFinishedMenu::SetScore(int32 Score)
+{
+    ScoreValue->SetText(FText::FromString(FString::FromInt(Score)));
+}
