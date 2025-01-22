@@ -11,6 +11,8 @@
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
 
+#include "GameFramework/Systems/UpgradesSystem/Upgrades/StatisticsComponentUpgrade.h"
+
 #include "ArcherCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyHit, float, Damage);
@@ -69,15 +71,15 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	void ProcessFrameMovement(float DeltaTime);
+	UFUNCTION()
+	void ProcessStatisticsUpgrade(UStatisticsComponentUpgrade* Upgrade);
 
+	void ProcessFrameMovement(float DeltaTime);
 	void UpdateExperienceHUD();
 	void LevelUpCharacter();
 
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
-
-	double MovementSpeed = 400.0;
 
 	int32 CurrentLevel = 1;
 	float ExperienceForNextLevel = 100.0f;

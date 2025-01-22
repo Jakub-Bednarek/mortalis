@@ -123,6 +123,11 @@ float UPlayerStatisticsComponent::GetBaseNormalAttackDamage() const
 	return BaseNormalAttackDamage;
 }
 
+float UPlayerStatisticsComponent::GetMovementSpeed() const
+{
+	return MovementSpeed;
+}
+
 void UPlayerStatisticsComponent::ApplyRegenerations(const float DeltaTime)
 {
 	if (CurrentHealth < MaxHealth)

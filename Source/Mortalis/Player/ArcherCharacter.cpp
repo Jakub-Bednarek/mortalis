@@ -6,8 +6,10 @@
 #include "GameFramework/PlayerComponents/NormalAttackComponent.h"
 #include "GameFramework/PlayerComponents/PlayerStatisticsComponent.h"
 #include "GameFramework/PlayerComponents/SpecialAttackComponent.h"
+#include "GameFramework/Systems/UpgradesSystem/UpgradesSystem.h"
 #include "GameManager.h"
 #include "Logging/LogMacros.h"
+#include "Player/ArcherCharacter.h"
 #include "Projectiles/BasicProjectile.h"
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -25,6 +27,19 @@ AArcherCharacter::AArcherCharacter()
 	NormalAttackComponent = CreateDefaultSubobject<UNormalAttackComponent>(TEXT("Normal attack Component"));
 	SpecialAttackComponent = CreateDefaultSubobject<USpecialAttackComponent>(TEXT("Special attack Component"));
 	// SkillAttackComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill Component"));
+
+	TArray<AActor*> UpgradesSystemActors {};
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUpgradesSystem::StaticClass(), UpgradesSystemActors);
+
+	if (UpgradesSystemActors.Num() != 1)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Expected exactly one UpgradesSystem actor, found %d"), UpgradesSystemActors.Num());
+	}
+	else
+	{
+		AUpgradesSystem* UpgradesSystemActor = (AUpgradesSystem*)(UpgradesSystemActors[0]);
+		UpgradesSystemActor->OnStatisticsComponentUpgradeSelected.AddDynamic(this, &AArcherCharacter::ProcessStatisticsUpgrade);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -103,11 +118,16 @@ void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 
 	FrameMovementVector.Normalize();
 	FrameMovementVector *= DeltaTime;
-	FrameMovementVector *= MovementSpeed;
+	FrameMovementVector *= PlayerStatisticsComponent->GetMovementSpeed();
 
 	SetActorLocation(CharacterFrameStartLocation + FrameMovementVector);
 
 	FrameMovementVector = FVector(0.0);
+}
+
+void AArcherCharacter::ProcessStatisticsUpgrade(UStatisticsComponentUpgrade* Upgrade)
+{
+	Upgrade->Apply(PlayerStatisticsComponent);
 }
 
 // Called to bind functionality to input

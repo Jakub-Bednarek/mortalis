@@ -100,7 +100,7 @@ public:
 
     virtual void Apply(UPlayerStatisticsComponent* Target) const override
     {
-        Target->IncreaseDamage(MovementSpeedDelta);
+        Target->IncreaseMovementSpeed(MovementSpeedDelta);
     }
 
 private:

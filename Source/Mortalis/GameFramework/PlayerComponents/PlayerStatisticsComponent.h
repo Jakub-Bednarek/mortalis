@@ -62,6 +62,9 @@ public:
 	float GetAttacksPerSecond() const;
 
 	UFUNCTION(BlueprintCallable)
+	float GetMovementSpeed() const;
+
+	UFUNCTION(BlueprintCallable)
 	float GetBaseNormalAttackDamage() const;
 
 public:
@@ -81,9 +84,9 @@ private:
 	TObjectPtr<UPlayerStatisticsHUD> PlayerStatisticsHUD;
 
 	double MovementSpeed = 400.0;
-	double AttacksPerSecond = 2.0;
+	double AttacksPerSecond = 1.0;
 
-	float BaseNormalAttackDamage = 115.0f;
+	float BaseNormalAttackDamage = 25.0f;
 
 	double MaxHealth = 100.0;
 	double CurrentHealth = MaxHealth;
