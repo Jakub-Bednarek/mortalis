@@ -43,6 +43,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, category="Player")
 	void HandlePlayerDeath();
+
+	UFUNCTION(BlueprintCallable)
+	bool IsMoving() const;
+	
+	UFUNCTION(BlueprintCallable)
+	FRotator GetCurrentDirectionRotation();
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UPlayerStatisticsHUD> PlayerStatisticsHUDClass;
@@ -86,6 +92,7 @@ private:
 	float CurrentExperience = 0.0f;
 
 	bool bIsDead = false;
+	bool bIsMoving = false;
 
 	FVector ViewportCenter;
 };

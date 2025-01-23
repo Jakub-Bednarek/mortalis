@@ -111,6 +111,7 @@ void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 {
 	if (FrameMovementVector == FVector(0.0))
 	{
+		bIsMoving = false;
 		return;
 	}
 
@@ -121,6 +122,7 @@ void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)
 	FrameMovementVector *= PlayerStatisticsComponent->GetMovementSpeed();
 
 	SetActorLocation(CharacterFrameStartLocation + FrameMovementVector);
+	bIsMoving = true;
 
 	FrameMovementVector = FVector(0.0);
 }
@@ -141,4 +143,28 @@ void AArcherCharacter::HandlePlayerDeath()
 	bIsDead = true;
 	SetActorEnableCollision(false);
 	GameStateManager::Get().AddStateChange(EMortalisGameState::PlayerDead);
+}
+
+bool AArcherCharacter::IsMoving() const
+{
+	return bIsMoving;
+}
+
+FRotator AArcherCharacter::GetCurrentDirectionRotation()
+{
+	FHitResult Hit;
+	bool bHitSuccessful = false;
+
+	// Most likely inefficient
+	auto* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	bHitSuccessful = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+	
+	APawn* ControlledPawn = PlayerController->GetPawn();
+	if (ControlledPawn != nullptr)
+	{
+		auto ResultDirection = (Hit.Location - GetActorLocation()).GetSafeNormal();
+		return FVector(ResultDirection.X, ResultDirection.Y, 0.0f).Rotation();
+	}
+
+	return FVector().Rotation();
 }
