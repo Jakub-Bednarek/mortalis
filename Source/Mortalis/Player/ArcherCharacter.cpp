@@ -82,29 +82,9 @@ void AArcherCharacter::MoveRight()
 	FrameMovementVector.Y += 1.0;
 }
 
-void AArcherCharacter::AddExperience(float Value)
+bool AArcherCharacter::IsDead() const
 {
-	CurrentExperience += Value;
-	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
-
-	if (CurrentExperience >= ExperienceForNextLevel)
-	{
-		LevelUpCharacter();
-	}
-}
-
-void AArcherCharacter::LevelUpCharacter()
-{
-	CurrentExperience -= ExperienceForNextLevel;
-	ExperienceForNextLevel *= 1.1f;
-	CurrentLevel += 1;
-
-	UpdateExperienceHUD();
-}
-
-void AArcherCharacter::UpdateExperienceHUD()
-{
-	// PlayerStatisticsHUD->SetExperience(CurrentExperience, ExperienceForNextLevel);
+	return bIsDead;
 }
 
 void AArcherCharacter::ProcessFrameMovement(const float DeltaTime)

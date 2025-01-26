@@ -38,14 +38,14 @@ public:
 	UFUNCTION(BlueprintCallable, category="Player/Movement")
 	void MoveRight();
 
-	UFUNCTION(BlueprintCallable, category="Player/Statistics")
-	void AddExperience(float Value);
-
 	UFUNCTION(BlueprintCallable, category="Player")
 	void HandlePlayerDeath();
 
 	UFUNCTION(BlueprintCallable)
 	bool IsMoving() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsDead() const;
 	
 	UFUNCTION(BlueprintCallable)
 	FRotator GetCurrentDirectionRotation();
@@ -81,15 +81,10 @@ private:
 	void ProcessStatisticsUpgrade(UStatisticsComponentUpgrade* Upgrade);
 
 	void ProcessFrameMovement(float DeltaTime);
-	void UpdateExperienceHUD();
 	void LevelUpCharacter();
 
 private:
 	FVector FrameMovementVector = {0.0, 0.0, 0.0};
-
-	int32 CurrentLevel = 1;
-	float ExperienceForNextLevel = 100.0f;
-	float CurrentExperience = 0.0f;
 
 	bool bIsDead = false;
 	bool bIsMoving = false;
