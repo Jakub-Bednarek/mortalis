@@ -12,53 +12,53 @@
 UCLASS()
 class MORTALIS_API ABasicProjectile : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ABasicProjectile();
+    GENERATED_BODY()
 
 public:
-	void SetVelocity(float Value);
-	void SetDurationInSeconds(float Value);
-	void Fire(const FVector& Direction);
-	void SetBaseDamage(float Value);
+    // Sets default values for this actor's properties
+    ABasicProjectile();
 
-	UFUNCTION(BlueprintCallable)
-	void OnProjectileHit();
-	
-	UFUNCTION(BlueprintCallable)
-	float GetDamage() const;
+public:
+    void SetVelocity(float Value);
+    void SetDurationInSeconds(float Value);
+    void Fire(const FVector &Direction);
+    void SetBaseDamage(float Value);
 
-	UFUNCTION(BlueprintCallable)
-	bool GetHasCollided() const;
+    UFUNCTION(BlueprintCallable)
+    void OnProjectileHit();
 
-	UFUNCTION(BlueprintCallable)
-	void OnCollisionEnter(const CollisionSource Source);
+    UFUNCTION(BlueprintCallable)
+    float GetDamage() const;
+
+    UFUNCTION(BlueprintCallable)
+    bool GetHasCollided() const;
+
+    UFUNCTION(BlueprintCallable)
+    void OnCollisionEnter(const CollisionSource Source);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
 private:
-	void UpdatePosition(float DeltaTime);
+    void UpdatePosition(float DeltaTime);
 
-	void OnProjectileExpire();
+    void OnProjectileExpire();
 
-	void CalculateCurrentDuration(float DeltaTime);
-	bool bIsExpired() const;
+    void CalculateCurrentDuration(float DeltaTime);
+    bool bIsExpired() const;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
-	float Velocity = 1300.0f;
-	float DurationInSeconds = 2.0f;
-	float CurrentDuration = 0.0f;
-	float BaseDamage = 0.0f;
+    float Velocity = 1300.0f;
+    float DurationInSeconds = 2.0f;
+    float CurrentDuration = 0.0f;
+    float BaseDamage = 0.0f;
 
-	bool bFired = false;
-	bool bHasCollided = false;
+    bool bFired = false;
+    bool bHasCollided = false;
 
-	FVector Direction = {};
+    FVector Direction = {};
 };

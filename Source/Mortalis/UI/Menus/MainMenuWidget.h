@@ -8,20 +8,20 @@
 #include "MainMenuWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UMainMenuWidget : public UUserWidget
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* StartGameButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *StartGameButton;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* SettingsButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *SettingsButton;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* ExitButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *ExitButton;
 };

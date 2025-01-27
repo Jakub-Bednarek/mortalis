@@ -8,34 +8,35 @@
 #include "Components/ActorComponent.h"
 #include "NormalAttackComponent.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MORTALIS_API UNormalAttackComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	UNormalAttackComponent();
+public:
+    UNormalAttackComponent();
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+                               FActorComponentTickFunction *ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
-	void Execute(const UPlayerStatisticsComponent* PlayerStatistics);
+    UFUNCTION(BlueprintCallable)
+    void Execute(const UPlayerStatisticsComponent *PlayerStatistics);
 
-public:	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
-	TSubclassOf<AActor> NormalProjectile {};
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectiles")
+    TSubclassOf<AActor> NormalProjectile{};
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	void UpdateAttackCooldown(float DeltaTime);
+    void UpdateAttackCooldown(float DeltaTime);
 
-	void ExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics);
-	void StartCooldownTimer(const UPlayerStatisticsComponent* PlayerStatistics);
-	
-	FVector CalculateAttackDirection() const;
+    void ExecuteAttack(const UPlayerStatisticsComponent *PlayerStatistics);
+    void StartCooldownTimer(const UPlayerStatisticsComponent *PlayerStatistics);
+
+    FVector CalculateAttackDirection() const;
+
 private:
-	float NextAttackCooldown = 0.0f;
+    float NextAttackCooldown = 0.0f;
 };

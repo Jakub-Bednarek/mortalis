@@ -16,91 +16,84 @@ DECLARE_MULTICAST_DELEGATE(FOnPlayerDeath);
 UENUM()
 enum class EMortalisGameState : uint8
 {
-	MainMenu UMETA(DisplayName="MainMenu"),
-	LevelLoading UMETA(DisplayName="LevelLoading"),
-	Playing UMETA(DisplayName="Playing"),
-	Paused UMETA(DisplayName="Paused"),
-	PlayerDead UMETA(DisplayName="PlayerDead"),
-	LevelFinished UMETA(DisplayName="LevelFinished"),
-	Restarting UMETA(DisplayName="Restarting")
+    MainMenu UMETA(DisplayName = "MainMenu"),
+    LevelLoading UMETA(DisplayName = "LevelLoading"),
+    Playing UMETA(DisplayName = "Playing"),
+    Paused UMETA(DisplayName = "Paused"),
+    PlayerDead UMETA(DisplayName = "PlayerDead"),
+    LevelFinished UMETA(DisplayName = "LevelFinished"),
+    Restarting UMETA(DisplayName = "Restarting")
 };
 
 UCLASS()
 class MORTALIS_API AGameManager : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AGameManager();
-	
-	virtual void Tick(float DeltaTime) override;
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UGameFinishedMenu> GameFinishedMenuClass;
+    AGameManager();
 
-	FOnLevelFinished OnLevelFinishedEvent;
-	FOnLevelRestart OnLevelRestartEvent;
-	FOnPlayerDeath OnPlayerDeathEvent;
+    virtual void Tick(float DeltaTime) override;
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UGameFinishedMenu> GameFinishedMenuClass;
+
+    FOnLevelFinished OnLevelFinishedEvent;
+    FOnLevelRestart OnLevelRestartEvent;
+    FOnPlayerDeath OnPlayerDeathEvent;
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	void PropagateStateChangedEvent(const EMortalisGameState NewState);
-	void ShowLevelFinishedMenu();
-	void HideLevelFinishedMenu();
+    void PropagateStateChangedEvent(const EMortalisGameState NewState);
+    void ShowLevelFinishedMenu();
+    void HideLevelFinishedMenu();
 
-	UFUNCTION()
-	void RestartGame();
+    UFUNCTION()
+    void RestartGame();
 
-	UFUNCTION()
-	void ExitToMainMenu();
+    UFUNCTION()
+    void ExitToMainMenu();
 
 private:
-	TObjectPtr<AExperienceSystem> ExperienceSystem;
-	TObjectPtr<UGameFinishedMenu> GameFinishedMenu;
+    TObjectPtr<AExperienceSystem> ExperienceSystem;
+    TObjectPtr<UGameFinishedMenu> GameFinishedMenu;
 };
 
 class GameStateManager
 {
 public:
-	GameStateManager() : CurrentState(EMortalisGameState::MainMenu) {}
+    GameStateManager() : CurrentState(EMortalisGameState::MainMenu) {}
 
-	static GameStateManager& Get()
-	{
-		static GameStateManager Instance {};
+    static GameStateManager &Get()
+    {
+        static GameStateManager Instance{};
 
-		return Instance;
-	}
+        return Instance;
+    }
 
-	void AddStateChange(const EMortalisGameState TargetState)
-	{
-		UE_LOG(LogTemp,
-			Verbose,
-			TEXT("State transition [%s] -> [%s]"),
-			*UEnum::GetValueAsString(CurrentState),
-			*UEnum::GetValueAsString(TargetState)
-		);
+    void AddStateChange(const EMortalisGameState TargetState)
+    {
+        UE_LOG(LogTemp, Verbose, TEXT("State transition [%s] -> [%s]"), *UEnum::GetValueAsString(CurrentState),
+               *UEnum::GetValueAsString(TargetState));
 
-		CurrentState = TargetState;
-		bStateChanged = true;
-	}
+        CurrentState = TargetState;
+        bStateChanged = true;
+    }
 
-	bool IsStateChanged() const
-	{
-		return bStateChanged;
-	}
+    bool IsStateChanged() const { return bStateChanged; }
 
-	EMortalisGameState ConsumeStateChange()
-	{
-		bStateChanged = false;
+    EMortalisGameState ConsumeStateChange()
+    {
+        bStateChanged = false;
 
-		return CurrentState;
-	}
- 
+        return CurrentState;
+    }
+
 private:
-	EMortalisGameState CurrentState;
+    EMortalisGameState CurrentState;
 
-	bool bStateChanged = false;
+    bool bStateChanged = false;
 };

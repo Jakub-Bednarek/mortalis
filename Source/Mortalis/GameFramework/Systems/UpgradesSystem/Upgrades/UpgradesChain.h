@@ -9,17 +9,13 @@
 #include "CoreMinimal.h"
 
 /**
- * 
+ *
  */
-template <typename T>
-struct Chain
+template <typename T> struct Chain
 {
-    Chain(FChainIndex Index) : Index(Index), NextUpgradeIndex(StartingUpgradeIndex), bIsExhausted(false)  {}
+    Chain(FChainIndex Index) : Index(Index), NextUpgradeIndex(StartingUpgradeIndex), bIsExhausted(false) {}
 
-    void RegisterUpgrade(T Upgrade) 
-    {
-        Upgrades.Push(Upgrade);
-    };
+    void RegisterUpgrade(T Upgrade) { Upgrades.Push(Upgrade); };
 
     void MarkNextUpgradeAsSelected()
     {
@@ -32,12 +28,9 @@ struct Chain
         }
     }
 
-    bool IsExhausted() const
-    {
-        return bIsExhausted;
-    }
+    bool IsExhausted() const { return bIsExhausted; }
 
-    T& GetNextCandidate()
+    T &GetNextCandidate()
     {
         check(Upgrades.Num() > 0);
         check(NextUpgradeIndex != Upgrades.Num());
@@ -48,8 +41,8 @@ struct Chain
 
     TArray<FUpgradeIndex> GetAllUpgradesIndexes() const
     {
-        TArray<FUpgradeIndex> Indexes {};
-        for (const auto& Upgrade : Upgrades)
+        TArray<FUpgradeIndex> Indexes{};
+        for (const auto &Upgrade : Upgrades)
         {
             Indexes.Push(Upgrade->GetIndex());
         }
@@ -57,17 +50,14 @@ struct Chain
         return Indexes;
     }
 
-    FChainIndex GetIndex() const
-    {
-        return Index;
-    }
+    FChainIndex GetIndex() const { return Index; }
 
 private:
-    static constexpr TArray<T*>::SizeType StartingUpgradeIndex { 0 };
- 
+    static constexpr TArray<T *>::SizeType StartingUpgradeIndex{0};
+
     // TODO: check if stability of elements guaranteed?
-    FChainIndex          Index;
-    TArray<T>            Upgrades {};
-    TArray<T>::SizeType  NextUpgradeIndex;
-    bool                 bIsExhausted;
+    FChainIndex Index;
+    TArray<T> Upgrades{};
+    TArray<T>::SizeType NextUpgradeIndex;
+    bool bIsExhausted;
 };

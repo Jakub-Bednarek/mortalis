@@ -17,52 +17,50 @@ DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 UCLASS()
 class AMortalisPlayerController : public APlayerController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	AMortalisPlayerController();
+    AMortalisPlayerController();
 
-	/** Time Threshold to know if it was a short press */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
+    /** Time Threshold to know if it was a short press */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+    float ShortPressThreshold;
 
-	/** FX Class that we will spawn when clicking */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FXCursor;
+    /** FX Class that we will spawn when clicking */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+    UNiagaraSystem *FXCursor;
 
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
-	
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationClickAction;
+    /** MappingContext */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputMappingContext *DefaultMappingContext;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationTouchAction;
+    /** Jump Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction *SetDestinationClickAction;
+
+    /** Jump Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction *SetDestinationTouchAction;
 
 protected:
-	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+    /** True if the controlled character should navigate to the mouse cursor. */
+    uint32 bMoveToMouseCursor : 1;
 
-	virtual void SetupInputComponent() override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
+    virtual void SetupInputComponent() override;
 
-	/** Input handlers for SetDestination action. */
-	void OnInputStarted();
-	void OnSetDestinationTriggered();
-	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
+    // To add mapping context
+    virtual void BeginPlay();
+
+    /** Input handlers for SetDestination action. */
+    void OnInputStarted();
+    void OnSetDestinationTriggered();
+    void OnSetDestinationReleased();
+    void OnTouchTriggered();
+    void OnTouchReleased();
 
 private:
-	FVector CachedDestination;
+    FVector CachedDestination;
 
-	bool bIsTouch; // Is it a touch device
-	float FollowTime; // For how long it has been pressed
+    bool bIsTouch;    // Is it a touch device
+    float FollowTime; // For how long it has been pressed
 };
-
-

@@ -11,19 +11,20 @@
 UCLASS()
 class MORTALIS_API ADestructibleVase : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ADestructibleVase();
+    GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UDestructibleMeshComponent> DestructibleMesh;
+public:
+    // Sets default values for this actor's properties
+    ADestructibleVase();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TObjectPtr<UDestructibleMeshComponent> DestructibleMesh;
+
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 };

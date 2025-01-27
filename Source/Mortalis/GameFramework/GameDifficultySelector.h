@@ -12,43 +12,43 @@
 UENUM()
 enum class GameDifficulty : uint8
 {
-	Easy UMETA(DisplayName = "Easy"),
-	Medium UMETA(DisplayName = "Medium"),
-	Hard UMETA(DisplayName = "Hard"),
+    Easy UMETA(DisplayName = "Easy"),
+    Medium UMETA(DisplayName = "Medium"),
+    Hard UMETA(DisplayName = "Hard"),
 };
 
 UCLASS()
 class MORTALIS_API AGameDifficultySelector : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AGameDifficultySelector();
-
-	virtual void Tick(float DeltaTime) override;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// BLEH TODO: custom base class for button to add difficulty parameter to delegate
-	UFUNCTION()
-	void EasyDifficultySelect();
-	
-	UFUNCTION()
-	void MediumDifficultySelect();
-	
-	UFUNCTION()
-	void HardDifficultySelect();
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UDifficultySelectionWidget> DifficultySelectionWidgetClass;
+    AGameDifficultySelector();
+
+    virtual void Tick(float DeltaTime) override;
+
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+public:
+    // BLEH TODO: custom base class for button to add difficulty parameter to delegate
+    UFUNCTION()
+    void EasyDifficultySelect();
+
+    UFUNCTION()
+    void MediumDifficultySelect();
+
+    UFUNCTION()
+    void HardDifficultySelect();
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UDifficultySelectionWidget> DifficultySelectionWidgetClass;
 
 private:
-	void LoadSelectedLevel(GameDifficulty SelectedDifficulty);
+    void LoadSelectedLevel(GameDifficulty SelectedDifficulty);
 
 private:
-	UDifficultySelectionWidget* DifficultySelectionWidget;
+    UDifficultySelectionWidget *DifficultySelectionWidget;
 };

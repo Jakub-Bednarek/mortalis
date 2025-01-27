@@ -7,29 +7,29 @@
 #include "PlayerStatisticsHUD.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UPlayerStatisticsHUD : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void InitializeBindings();
+    void InitializeBindings();
 
-	void SetHealth(float CurrentHealth, float MaxHealth);
-	void SetMana(float CurrentMana, float MaxMana);
+    void SetHealth(float CurrentHealth, float MaxHealth);
+    void SetMana(float CurrentMana, float MaxMana);
 
-	UFUNCTION()
-	void SetExperience(float CurrentExperience, float MaxExperience);
-	
+    UFUNCTION()
+    void SetExperience(float CurrentExperience, float MaxExperience);
+
 public:
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	class UProgressBar* HealthBar;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UProgressBar *HealthBar;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	class UProgressBar* ManaBar;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UProgressBar *ManaBar;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	class UProgressBar* ExperienceBar;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UProgressBar *ExperienceBar;
 };

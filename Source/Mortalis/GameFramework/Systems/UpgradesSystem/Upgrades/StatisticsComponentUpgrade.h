@@ -10,11 +10,12 @@
 #include "StatisticsComponentUpgrade.generated.h"
 
 /**
- * 
+ *
  */
 
 UCLASS()
-class UStatisticsComponentUpgrade : public UObject, public UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>
+class UStatisticsComponentUpgrade : public UObject,
+                                    public UpgradeBase<UPlayerStatisticsComponent, UStatisticsComponentUpgrade>
 {
     GENERATED_BODY()
 
@@ -23,6 +24,6 @@ public:
 
     UStatisticsComponentUpgrade() = default;
     virtual ~UStatisticsComponentUpgrade() = default;
-    
-    virtual void Apply(UPlayerStatisticsComponent*) const override {}
+
+    virtual void Apply(UPlayerStatisticsComponent *) const override {}
 };

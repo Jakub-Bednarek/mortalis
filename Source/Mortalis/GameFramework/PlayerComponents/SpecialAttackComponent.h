@@ -9,34 +9,34 @@
 #include "Components/ActorComponent.h"
 #include "SpecialAttackComponent.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MORTALIS_API USpecialAttackComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	USpecialAttackComponent();
+public:
+    USpecialAttackComponent();
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+                               FActorComponentTickFunction *ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
-	void Execute(UPlayerStatisticsComponent* PlayerStatistics);
+    UFUNCTION(BlueprintCallable)
+    void Execute(UPlayerStatisticsComponent *PlayerStatistics);
 
-public:	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectiles")
-	TSubclassOf<ABasicProjectile> SpecialProjectile {};
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectiles")
+    TSubclassOf<ABasicProjectile> SpecialProjectile{};
 
 protected:
-	virtual void BeginPlay() override;		
+    virtual void BeginPlay() override;
 
 private:
-	void ExecuteAttack(UPlayerStatisticsComponent* PlayerStatistics);
+    void ExecuteAttack(UPlayerStatisticsComponent *PlayerStatistics);
 
-	bool CanExecuteAttack(const UPlayerStatisticsComponent* PlayerStatistics) const;
-		
-	FVector CalculateAttackDirection() const;
+    bool CanExecuteAttack(const UPlayerStatisticsComponent *PlayerStatistics) const;
+
+    FVector CalculateAttackDirection() const;
 
 private:
-	float AttackManaCost = 50.0f;
+    float AttackManaCost = 50.0f;
 };

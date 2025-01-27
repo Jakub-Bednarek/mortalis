@@ -13,9 +13,9 @@ struct FUpgradeUIData
     GENERATED_BODY()
 
     // TODO: Why copy assignment OP is deleted for FName and can't use ref
-    FName            Name;
-    FName            Description;
-    FUpgradeIndex    Index;
+    FName Name;
+    FName Description;
+    FUpgradeIndex Index;
     EUpgradeCategory Category;
 
     // TODO: Image

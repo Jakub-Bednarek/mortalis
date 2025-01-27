@@ -11,27 +11,28 @@
 UCLASS()
 class MORTALIS_API AMainMenuManager : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AMainMenuManager();
+    GENERATED_BODY()
 
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Sets default values for this actor's properties
+    AMainMenuManager();
 
-public:	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;
+    virtual void Tick(float DeltaTime) override;
+
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-	void StartGame();
+    UFUNCTION()
+    void StartGame();
 
-	UFUNCTION()
-	void Exit();
+    UFUNCTION()
+    void Exit();
+
 private:
-	TObjectPtr<UMainMenuWidget> MainMenuWidget;
+    TObjectPtr<UMainMenuWidget> MainMenuWidget;
 };

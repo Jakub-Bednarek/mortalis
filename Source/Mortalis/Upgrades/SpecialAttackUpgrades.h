@@ -9,25 +9,23 @@ UCLASS()
 class USpecialAttackDamageUpgrade : public USpecialAttackComponentUpgrade
 {
     GENERATED_BODY()
-    
-    class SpecialAttackDamageUpgradeBuilder : public UpgradeBaseBuilder<USpecialAttackDamageUpgrade, SpecialAttackDamageUpgradeBuilder>
+
+    class SpecialAttackDamageUpgradeBuilder
+        : public UpgradeBaseBuilder<USpecialAttackDamageUpgrade, SpecialAttackDamageUpgradeBuilder>
     {
     public:
-        SpecialAttackDamageUpgradeBuilder(USpecialAttackDamageUpgrade* Target, FUpgradeIndex&& Index) : UpgradeBaseBuilder(Target, MoveTemp(Index)) {}
-
-        SpecialAttackDamageUpgradeBuilder& WithDamageValue(float Value)
+        SpecialAttackDamageUpgradeBuilder(USpecialAttackDamageUpgrade *Target, FUpgradeIndex &&Index)
+            : UpgradeBaseBuilder(Target, MoveTemp(Index))
         {
-            Target->DamageDelta = Value;
         }
+
+        SpecialAttackDamageUpgradeBuilder &WithDamageValue(float Value) { Target->DamageDelta = Value; }
     };
 
 public:
     using Builder = SpecialAttackDamageUpgradeBuilder;
 
-    virtual void Apply(USpecialAttackComponent* Target) const override
-    {
-
-    }
+    virtual void Apply(USpecialAttackComponent *Target) const override {}
 
 private:
     float DamageDelta = 10.0f;

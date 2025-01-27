@@ -10,11 +10,12 @@
 #include "SpecialAttackComponentUpgrade.generated.h"
 
 /**
- * 
+ *
  */
 
 UCLASS()
-class USpecialAttackComponentUpgrade : public UObject, public UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>
+class USpecialAttackComponentUpgrade : public UObject,
+                                       public UpgradeBase<USpecialAttackComponent, USpecialAttackComponentUpgrade>
 {
     GENERATED_BODY()
 
@@ -23,6 +24,6 @@ public:
 
     USpecialAttackComponentUpgrade() = default;
     virtual ~USpecialAttackComponentUpgrade() = default;
-    
-    virtual void Apply(USpecialAttackComponent*) const override {}
+
+    virtual void Apply(USpecialAttackComponent *) const override {}
 };

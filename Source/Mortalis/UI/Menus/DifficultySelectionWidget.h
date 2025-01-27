@@ -9,20 +9,20 @@
 #include "DifficultySelectionWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UDifficultySelectionWidget : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* EasyDifficultyButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *EasyDifficultyButton;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* MediumDifficultyButton;
-	
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* HardDifficultyButton; 
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *MediumDifficultyButton;
+
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *HardDifficultyButton;
 };

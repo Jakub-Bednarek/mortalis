@@ -9,24 +9,24 @@
 #include "UpgradeSelectionCard.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UUpgradeSelectionCard : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void SetName(FText Value);
-	void SetDescription(FText Value);
-	
+    void SetName(FText Value);
+    void SetDescription(FText Value);
+
 public:
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	class UTextBlock* Name;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UTextBlock *Name;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	class UTextBlock* Description;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    class UTextBlock *Description;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* CardButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *CardButton;
 };

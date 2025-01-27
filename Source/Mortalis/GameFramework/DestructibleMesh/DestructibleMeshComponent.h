@@ -7,21 +7,21 @@
 #include "DestructibleMeshComponent.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UDestructibleMeshComponent : public UStaticMeshComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	UFUNCTION(BlueprintCallable)
-	void SetCubeSize(float Size);
+    UFUNCTION(BlueprintCallable)
+    void SetCubeSize(float Size);
 
-	UFUNCTION(BlueprintCallable)
-	void CalculateCubePositions();
+    UFUNCTION(BlueprintCallable)
+    void CalculateCubePositions();
 
 private:
-	float CubeSize = 0.0f;
+    float CubeSize = 0.0f;
 
-	TArray<FVector> TargetCubePositions {};
+    TArray<FVector> TargetCubePositions{};
 };

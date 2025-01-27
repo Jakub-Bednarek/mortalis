@@ -9,11 +9,8 @@
 UCLASS(minimalapi)
 class AMortalisGameMode : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	AMortalisGameMode();
+    AMortalisGameMode();
 };
-
-
-

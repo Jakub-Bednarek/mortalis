@@ -16,35 +16,17 @@ struct FPoolIndex
         return temp;
     }
 
-    bool operator>(const FPoolIndex& Rhs) const
-    {
-        return Value > Rhs.Value;
-    }
+    bool operator>(const FPoolIndex &Rhs) const { return Value > Rhs.Value; }
 
-    bool operator<(const FPoolIndex& Rhs) const
-    {
-        return Value < Rhs.Value;
-    }
+    bool operator<(const FPoolIndex &Rhs) const { return Value < Rhs.Value; }
 
-    bool operator>=(const FPoolIndex& Rhs) const
-    {
-        return not (Value < Rhs.Value);
-    }
+    bool operator>=(const FPoolIndex &Rhs) const { return not(Value < Rhs.Value); }
 
-    bool operator<=(const FPoolIndex& Rhs) const
-    {
-        return not (Value > Rhs.Value);
-    }
+    bool operator<=(const FPoolIndex &Rhs) const { return not(Value > Rhs.Value); }
 
-    bool operator==(const FPoolIndex& Rhs) const
-    {
-        return Value == Rhs.Value;
-    }
+    bool operator==(const FPoolIndex &Rhs) const { return Value == Rhs.Value; }
 
     uint32 Value;
 };
 
-FORCEINLINE uint32 GetTypeHash(const FPoolIndex& Value)
-{
-    return Value.Value;
-}
+FORCEINLINE uint32 GetTypeHash(const FPoolIndex &Value) { return Value.Value; }

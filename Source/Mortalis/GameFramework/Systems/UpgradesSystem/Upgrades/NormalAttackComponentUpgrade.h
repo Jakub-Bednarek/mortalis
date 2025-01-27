@@ -10,11 +10,12 @@
 #include "NormalAttackComponentUpgrade.generated.h"
 
 /**
- * 
+ *
  */
 
 UCLASS()
-class UNormalAttackComponentUpgrade : public UObject, public UpgradeBase<UNormalAttackComponent, UNormalAttackComponentUpgrade>
+class UNormalAttackComponentUpgrade : public UObject,
+                                      public UpgradeBase<UNormalAttackComponent, UNormalAttackComponentUpgrade>
 {
     GENERATED_BODY()
 
@@ -24,5 +25,5 @@ public:
     UNormalAttackComponentUpgrade() = default;
     virtual ~UNormalAttackComponentUpgrade() = default;
 
-    virtual void Apply(UNormalAttackComponent*) const override {}
+    virtual void Apply(UNormalAttackComponent *) const override {}
 };

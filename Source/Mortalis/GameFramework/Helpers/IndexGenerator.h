@@ -8,8 +8,7 @@
 /*
     Generates sequence of indexes in range <Min, Max> both inclusive
 */
-template <typename T, T Min, T Max>
-class IndexGenerator
+template <typename T, T Min, T Max> class IndexGenerator
 {
 public:
     T Next()

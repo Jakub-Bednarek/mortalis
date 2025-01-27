@@ -10,26 +10,26 @@
 #include "GameFinishedMenu.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MORTALIS_API UGameFinishedMenu : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	void SetScore(int32 Score);
+    void SetScore(int32 Score);
 
 public:
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* ContinueButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *ContinueButton;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UButton* RestartButton;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UButton *RestartButton;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UTextBlock* ScoreText;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UTextBlock *ScoreText;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UTextBlock* ScoreValue;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UTextBlock *ScoreValue;
 };

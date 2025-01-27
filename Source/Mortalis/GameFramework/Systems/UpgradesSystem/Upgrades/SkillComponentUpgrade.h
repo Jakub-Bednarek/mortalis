@@ -10,7 +10,7 @@
 #include "SkillComponentUpgrade.generated.h"
 
 /**
- * 
+ *
  */
 
 UCLASS()
@@ -24,5 +24,5 @@ public:
     USkillComponentUpgrade() = default;
     virtual ~USkillComponentUpgrade() = default;
 
-    virtual void Apply(USkillComponent*) const override {}
+    virtual void Apply(USkillComponent *) const override {}
 };

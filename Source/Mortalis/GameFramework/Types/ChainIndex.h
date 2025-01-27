@@ -16,35 +16,17 @@ struct FChainIndex
         return temp;
     }
 
-    bool operator>(const FChainIndex& Rhs) const
-    {
-        return Value > Rhs.Value;
-    }
+    bool operator>(const FChainIndex &Rhs) const { return Value > Rhs.Value; }
 
-    bool operator<(const FChainIndex& Rhs) const
-    {
-        return Value < Rhs.Value;
-    }
+    bool operator<(const FChainIndex &Rhs) const { return Value < Rhs.Value; }
 
-    bool operator>=(const FChainIndex& Rhs) const
-    {
-        return not (Value < Rhs.Value);
-    }
+    bool operator>=(const FChainIndex &Rhs) const { return not(Value < Rhs.Value); }
 
-    bool operator<=(const FChainIndex& Rhs) const
-    {
-        return not (Value > Rhs.Value);
-    }
+    bool operator<=(const FChainIndex &Rhs) const { return not(Value > Rhs.Value); }
 
-    bool operator==(const FChainIndex& Rhs) const
-    {
-        return Value == Rhs.Value;
-    }
+    bool operator==(const FChainIndex &Rhs) const { return Value == Rhs.Value; }
 
     uint32 Value;
 };
 
-FORCEINLINE uint32 GetTypeHash(const FChainIndex& Value)
-{
-    return Value.Value;
-}
+FORCEINLINE uint32 GetTypeHash(const FChainIndex &Value) { return Value.Value; }

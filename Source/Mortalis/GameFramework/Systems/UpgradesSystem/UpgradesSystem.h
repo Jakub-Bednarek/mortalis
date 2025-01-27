@@ -21,82 +21,86 @@
 // Whole upgrade procedure is gonna be like a fucking ping pong of events, not a fan of that
 // We're exchanging (most likely) a performance for low coupling :/
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpgradeProcedureBegin, const TArray<FUpgradeUIData>&, RandomUpgradesUIData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpgradeProcedureBegin, const TArray<FUpgradeUIData> &,
+                                            RandomUpgradesUIData);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpgradeProcedureEnd);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStatisticsComponentUpgradeSelected, UStatisticsComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNormalAtatckComponentUpgradeSelected, UNormalAttackComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpecialAttackComponentUpgradeSelected, USpecialAttackComponentUpgrade*, Upgrade);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUpgradeSelected, USkillComponentUpgrade*, Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStatisticsComponentUpgradeSelected, UStatisticsComponentUpgrade *,
+                                            Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNormalAtatckComponentUpgradeSelected, UNormalAttackComponentUpgrade *,
+                                            Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpecialAttackComponentUpgradeSelected, USpecialAttackComponentUpgrade *,
+                                            Upgrade);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUpgradeSelected, USkillComponentUpgrade *, Upgrade);
 
 UCLASS()
 class MORTALIS_API AUpgradesSystem : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AUpgradesSystem();
-
-	virtual void Tick(float DeltaTime) override;
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
-	AExperienceSystem* ExperienceSystem;
+    AUpgradesSystem();
 
-	UPROPERTY()
-	FOnUpgradeProcedureBegin OnUpgradeProcedureBegin;
-	
-	UPROPERTY()
-	FOnUpgradeProcedureEnd OnUpgradeProcedureEnd;
+    virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY()
-	FOnStatisticsComponentUpgradeSelected OnStatisticsComponentUpgradeSelected;
+public:
+    UPROPERTY(EditAnywhere)
+    AExperienceSystem *ExperienceSystem;
 
-	UPROPERTY()
-	FOnNormalAtatckComponentUpgradeSelected OnNormalAtatckComponentUpgradeSelected;
+    UPROPERTY()
+    FOnUpgradeProcedureBegin OnUpgradeProcedureBegin;
 
-	UPROPERTY()
-	FOnSpecialAttackComponentUpgradeSelected OnSpecialAttackComponentUpgradeSelected;
+    UPROPERTY()
+    FOnUpgradeProcedureEnd OnUpgradeProcedureEnd;
 
-	UPROPERTY()
-	FOnSkillUpgradeSelected OnSkillUpgradeSelected;
+    UPROPERTY()
+    FOnStatisticsComponentUpgradeSelected OnStatisticsComponentUpgradeSelected;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<UUpgradeSelectionWidget> UpgradeSelectionWidgetClass;
+    UPROPERTY()
+    FOnNormalAtatckComponentUpgradeSelected OnNormalAtatckComponentUpgradeSelected;
+
+    UPROPERTY()
+    FOnSpecialAttackComponentUpgradeSelected OnSpecialAttackComponentUpgradeSelected;
+
+    UPROPERTY()
+    FOnSkillUpgradeSelected OnSkillUpgradeSelected;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TSubclassOf<UUpgradeSelectionWidget> UpgradeSelectionWidgetClass;
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-	void StartUpgradeProcedure(uint32 Level);
+    UFUNCTION()
+    void StartUpgradeProcedure(uint32 Level);
 
-	UFUNCTION()
-	void FinishUpgradeProcedure(FUpgradeIndex Index, EUpgradeCategory Category);
+    UFUNCTION()
+    void FinishUpgradeProcedure(FUpgradeIndex Index, EUpgradeCategory Category);
 
-	TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count, const TArray<EUpgradeCategory>& ActiveUpgradePools);
+    TArray<FUpgradeUIData> GenerateUpgradeChoices(uint8 Count, const TArray<EUpgradeCategory> &ActiveUpgradePools);
 
-	TArray<EUpgradeCategory> GetActiveUpgradePools() const;
+    TArray<EUpgradeCategory> GetActiveUpgradePools() const;
 
-	EUpgradeCategory GetRandomUpgradeCategory(const TArray<EUpgradeCategory>& ActiveUpgradesPools) const;
+    EUpgradeCategory GetRandomUpgradeCategory(const TArray<EUpgradeCategory> &ActiveUpgradesPools) const;
 
-	void RegisterStatisticsUpgrades();
-	void RegisterNormalAttackUpgrades();
-	void RegisterSpecialAttackUpgrades();
-	void RegisterSkillUpgrades();
-	void RegisterUpgrades();
+    void RegisterStatisticsUpgrades();
+    void RegisterNormalAttackUpgrades();
+    void RegisterSpecialAttackUpgrades();
+    void RegisterSkillUpgrades();
+    void RegisterUpgrades();
 
-	void MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category);
+    void MarkAndPropagateSelectedUpgrade(FUpgradeIndex Index, EUpgradeCategory Category);
 
 private:
-	static constexpr uint8 DefaultNumberOfUpgradesToGenerate = 3;
+    static constexpr uint8 DefaultNumberOfUpgradesToGenerate = 3;
 
-	int64 UpgradeCategoryEntriesCount = 0;
+    int64 UpgradeCategoryEntriesCount = 0;
 
-	UUpgradeSelectionWidget* UpgradeSelectionWidget;
+    UUpgradeSelectionWidget *UpgradeSelectionWidget;
 
-	UpgradesPool<UStatisticsComponentUpgrade*> StatisticsUpgradesPool;
-	UpgradesPool<UNormalAttackComponentUpgrade*> NormalAttackUpgradesPool;
-	UpgradesPool<USpecialAttackComponentUpgrade*> SpecialAttackUpgradesPool;
-	UpgradesPool<USkillComponentUpgrade*> SkillsUpgradesPool;
+    UpgradesPool<UStatisticsComponentUpgrade *> StatisticsUpgradesPool;
+    UpgradesPool<UNormalAttackComponentUpgrade *> NormalAttackUpgradesPool;
+    UpgradesPool<USpecialAttackComponentUpgrade *> SpecialAttackUpgradesPool;
+    UpgradesPool<USkillComponentUpgrade *> SkillsUpgradesPool;
 };

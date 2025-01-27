@@ -13,7 +13,7 @@
 #include "UpgradeSelectionWidget.generated.h"
 
 /**
- * 
+ *
  */
 
 class UButton;
@@ -23,42 +23,43 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnOptionSelected, FUpgradeIndex, Index, EUpg
 UCLASS()
 class MORTALIS_API UUpgradeSelectionWidget : public UUserWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UFUNCTION()
-	void ShowSelectionMenu(TArray<FUpgradeUIData> UpgradeChoices);
+    UFUNCTION()
+    void ShowSelectionMenu(TArray<FUpgradeUIData> UpgradeChoices);
 
-	UFUNCTION()
-	void HideSelectionMenu();
+    UFUNCTION()
+    void HideSelectionMenu();
 
-	UFUNCTION()
-	void InitializeBindings();
+    UFUNCTION()
+    void InitializeBindings();
 
 public:
-	UPROPERTY()
-	FOnOptionSelected OnOptionSelectedEvent;
-	
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UUpgradeSelectionCard* FirstOption;
+    UPROPERTY()
+    FOnOptionSelected OnOptionSelectedEvent;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UUpgradeSelectionCard* SecondOption;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UUpgradeSelectionCard *FirstOption;
 
-	UPROPERTY(EditAnywhere, meta=(BindWidget))
-	UUpgradeSelectionCard* ThirdOption;
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UUpgradeSelectionCard *SecondOption;
+
+    UPROPERTY(EditAnywhere, meta = (BindWidget))
+    UUpgradeSelectionCard *ThirdOption;
 
 private:
-	void OnOptionSelected(FUpgradeIndex Index, EUpgradeCategory Category);
+    void OnOptionSelected(FUpgradeIndex Index, EUpgradeCategory Category);
 
-	UFUNCTION()
-	void OnFirstOptionSelected();
+    UFUNCTION()
+    void OnFirstOptionSelected();
 
-	UFUNCTION()
-	void OnSecondOptionSelected();
+    UFUNCTION()
+    void OnSecondOptionSelected();
 
-	UFUNCTION()
-	void OnThirdOptionSelected();
+    UFUNCTION()
+    void OnThirdOptionSelected();
+
 private:
-	TArray<FUpgradeUIData> UIData;
+    TArray<FUpgradeUIData> UIData;
 };

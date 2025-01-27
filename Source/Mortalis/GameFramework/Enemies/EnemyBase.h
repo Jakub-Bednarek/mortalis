@@ -13,25 +13,26 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, float, Experience);
 UCLASS()
 class MORTALIS_API AEnemyBase : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AEnemyBase();
-
-	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION(BlueprintCallable)
-	void ProcessDeath();
+    GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Experience;
+    AEnemyBase();
 
-	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnDeath OnDeathEvent;
+    virtual void Tick(float DeltaTime) override;
+
+    UFUNCTION(BlueprintCallable)
+    void ProcessDeath();
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Experience;
+
+    UPROPERTY(BlueprintCallable, BlueprintAssignable)
+    FOnDeath OnDeathEvent;
+
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	float GetExperience() const;
+    float GetExperience() const;
 };

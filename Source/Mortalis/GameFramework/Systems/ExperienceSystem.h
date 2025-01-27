@@ -13,39 +13,40 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnExperienceGained, float, Current
 UCLASS(BlueprintType)
 class MORTALIS_API AExperienceSystem : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	AExperienceSystem();
+    GENERATED_BODY()
 
-	virtual void Tick(float DeltaTime) override;
+public:
+    AExperienceSystem();
 
-	UFUNCTION(BlueprintCallable)
-	void AddExperience(float Experience);
+    virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	int32 GetMonstersKilled() const;
-public:	
-	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnCharacterLevelUp OnCharacterLevelUp;
+    UFUNCTION(BlueprintCallable)
+    void AddExperience(float Experience);
 
-	UPROPERTY()
-	FOnExperienceGained OnExperienceGainedEvent;
+    UFUNCTION()
+    int32 GetMonstersKilled() const;
+
+public:
+    UPROPERTY(BlueprintCallable, BlueprintAssignable)
+    FOnCharacterLevelUp OnCharacterLevelUp;
+
+    UPROPERTY()
+    FOnExperienceGained OnExperienceGainedEvent;
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 private:
-	bool CanLevelUp() const;
+    bool CanLevelUp() const;
 
-	void LevelUp();
+    void LevelUp();
 
 private:
-	// this part could make use of some strategy pattern
-	int32 CurrentLevel = 0;
+    // this part could make use of some strategy pattern
+    int32 CurrentLevel = 0;
 
-	float CurrentExperience = 0;
-	float ExperienceForNextLevel = 100;
+    float CurrentExperience = 0;
+    float ExperienceForNextLevel = 100;
 
-	int32 MonstersKilled = 0;
+    int32 MonstersKilled = 0;
 };
