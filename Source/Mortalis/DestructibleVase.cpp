@@ -23,6 +23,5 @@ void ADestructibleVase::BeginPlay()
 void ADestructibleVase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
